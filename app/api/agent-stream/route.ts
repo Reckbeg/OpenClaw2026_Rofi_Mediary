@@ -85,7 +85,7 @@ export async function GET(request: Request) {
 
           const executor = runExecutorAgent(analyst, scenario);
 
-          for (const toolInvocation of executor.toolInvocations.slice(0, 8)) {
+          for (const toolInvocation of executor.toolInvocations.slice(0, 4)) {
             await writeEvent({
               type: "executor.tool_invoked",
               agent: "Ethan Executor",
@@ -95,7 +95,7 @@ export async function GET(request: Request) {
             });
           }
 
-          for (const artifact of executor.actionArtifacts.slice(0, 6)) {
+          for (const artifact of executor.actionArtifacts.slice(0, 3)) {
             await writeEvent({
               type: "executor.artifact_created",
               agent: "Ethan Executor",
@@ -105,7 +105,7 @@ export async function GET(request: Request) {
             });
           }
 
-          for (const followUpTask of executor.followUpTasks.slice(0, 6)) {
+          for (const followUpTask of executor.followUpTasks.slice(0, 3)) {
             await writeEvent({
               type: "executor.followup_queued",
               agent: "Ethan Executor",

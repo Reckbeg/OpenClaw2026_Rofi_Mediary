@@ -42,6 +42,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [lastScenario, setLastScenario] = useState<DemoScenario | null>(null);
   const streamRef = useRef<EventSource | null>(null);
+  const streamCompletedRef = useRef(false);
   const selectedEmployee =
     sampleOrgDataset.employees.find((employee) => employee.id === defaultEmployeeId) ??
     sampleOrgDataset.employees[0];
@@ -104,6 +105,7 @@ export default function Home() {
 
   function runAgentCycle(scenario: DemoScenario) {
     closeStream();
+    streamCompletedRef.current = false;
     setResult(null);
     setStreamEvents([]);
     setError(null);
@@ -130,6 +132,7 @@ export default function Home() {
       setStreamEvents((current) => [...current, event]);
 
       if (event.type === "run.completed") {
+        streamCompletedRef.current = true;
         setResult(event.payload as AnalyzeResponse);
         setIsStreaming(false);
         closeStream();
@@ -143,6 +146,9 @@ export default function Home() {
     };
 
     source.onerror = () => {
+      if (streamCompletedRef.current) {
+        return;
+      }
       setError(LIVE_STREAM_ERROR);
       setIsStreaming(false);
       closeStream();
@@ -242,7 +248,9 @@ export default function Home() {
         <section className="mb-6 rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Live agent run</p>
           <h2 className="mt-2 text-2xl font-semibold text-stone-950">Server-streamed Mediary cycle</h2>
-          <p className="mt-2 text-sm text-stone-600">Server-streamed Mediary cycle: Analyst → Executor → Supervisor.</p>
+          <p className="mt-2 text-sm text-stone-600">
+            Live backend events from the Mediary agent run. Final output appears only after run.completed.
+          </p>
           <div className="mt-4 space-y-3">
             {streamEvents.map((event, index) => {
               const status = getEventStatus(event, index, latestEventIndex, isStreaming);
