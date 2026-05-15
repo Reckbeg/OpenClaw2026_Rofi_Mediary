@@ -174,6 +174,12 @@ In the demo setup, Hermes operated Mediary with MiMo V2.5 Pro for external execu
 The deterministic in-repo loop remains the source of truth for scoring, routing, and output contracts.
 The submitted application runs locally without external model dependency for judge reproducibility.
 
+## Hermes Operating Specs
+
+Public-safe Hermes task prompts, runbooks, and agent profiles are available in `hermes/`.
+
+These files document how Hermes can operate and evaluate Mediary without committing local Hermes runtime configuration, credentials, or private state.
+
 ## 8) Core Features
 
 1. Org-wide autonomous agent loop  
