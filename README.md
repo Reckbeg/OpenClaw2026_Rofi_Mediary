@@ -67,9 +67,9 @@ Key components:
 
 ## Hermes Runtime Role
 
-Mediary's core workload diplomacy loop is implemented in deterministic TypeScript modules for hackathon reliability and judge reproducibility. Hermes is used as the runtime orchestration layer to execute, validate, and stress-test the agent loop.
+Mediary's core workload diplomacy loop is implemented in deterministic TypeScript modules for hackathon reliability and judge reproducibility. Hermes and MiMo V2.5 Pro were used externally during demo preparation to orchestrate, validate, and stress-test the agent loop.
 
-In the demo setup, Hermes runs Mediary with MiMo V2.5 Pro for execution review and multi-agent evaluation. The Hermes evaluation checks whether Mediary demonstrates:
+In the demo setup, Hermes operated Mediary with MiMo V2.5 Pro for external execution review and multi-agent evaluation. The external evaluation checks whether Mediary demonstrates:
 - signal observation,
 - risk reasoning,
 - intervention routing,
@@ -78,6 +78,7 @@ In the demo setup, Hermes runs Mediary with MiMo V2.5 Pro for execution review a
 - scenario-sensitive behavior.
 
 The deterministic in-repo loop remains the source of truth for scoring, routing, and output contracts.
+The submitted application runs locally without external model dependency for judge reproducibility.
 
 ## 8) Core Features
 
@@ -125,9 +126,8 @@ The deterministic in-repo loop remains the source of truth for scoring, routing,
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
-- Deterministic in-repo data + scoring modules
-- Hermes as orchestration/runtime layer
-- MiMo V2.5 Pro as the reasoning model used through Hermes for execution review and multi-agent evaluation
+- Deterministic in-repo TypeScript agent loop for reproducible runtime behavior
+- Hermes + MiMo V2.5 Pro used externally for orchestration, validation, stress testing, and multi-agent evaluation during demo preparation
 
 ## 11) How To Run Locally
 
@@ -204,11 +204,11 @@ This allows the UI and CLI to consume the same deterministic contract.
 ## 17) AI Tools / Models Used
 
 - Cursor for development assistance.
-- Hermes for agent runtime orchestration, validation runs, and multi-agent evaluation.
-- MiMo V2.5 Pro as the primary reasoning model used through Hermes for execution review and stress testing.
+- Hermes for external demo orchestration, validation runs, and multi-agent evaluation.
+- MiMo V2.5 Pro as the reasoning model used through Hermes during external execution review and stress testing.
 - Deterministic in-repo agent logic for stable MVP runtime behavior and judge reproducibility.
 
-Mediary uses deterministic TypeScript modules for the core workload analysis loop, while Hermes + MiMo V2.5 Pro are used to orchestrate, inspect, and evaluate the autonomous agent workflow.
+The submitted application does not require Hermes or MiMo to run locally. They were used to operate and evaluate the agent loop during demo preparation.
 
 ## 18) Submission Notes
 
@@ -219,3 +219,7 @@ Mediary uses deterministic TypeScript modules for the core workload analysis loo
 - Core runtime outputs remain deterministic and reproducible.
 - Hermes + MiMo V2.5 Pro are used for orchestration, validation, and agentic evaluation.
 - The 4-week trend layer supports sustained overload detection without relying only on a single-week snapshot.
+- Mediary is a single-cycle autonomous workload diplomacy loop.
+- It is not a persistent production agent yet.
+- Follow-up cadence is represented as declared next-cycle intent, not a real scheduled job.
+- No external calendar, HR, or messaging systems are modified.
