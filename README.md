@@ -107,7 +107,13 @@ The deterministic in-repo loop remains the source of truth for scoring, routing,
 15. Execution trace (observe → reason → decide → execute → follow-up)  
 16. CLI runner scenarios  
 17. Minimal UI rendering the same agent output through app/API pipeline  
-18. No auth, no database, no external integrations
+18. No auth, no database, no external integrations  
+19. 4-week workload trend signal  
+20. Monthly trend org summary  
+21. Previous week risk context  
+22. Manager coaching brief for high and sustained-high routes  
+23. Projected meeting hours reduced  
+24. Projected focus hours gained
 
 ## 9) Demo Scenarios
 
@@ -162,13 +168,20 @@ npm run build
 The top-level agent output includes:
 - `scenario`
 - `orgSummary`
+- `monthlyTrendOrgSummary`
+- `monthlyTrendByEmployee`
 - `teamHeatmap`
 - `interventionQueue`
 - `hrMemo`
 - `impactSimulation`
+  - `projectedMeetingHoursReduced`
+  - `projectedFocusHoursGained`
 - `selectedEmployeeDetail`
+  - `monthlyTrend`
 - `executionTrace`
 - `workflowStatus`
+
+The monthly trend fields allow Mediary to reason over sustained workload patterns instead of only a single-week snapshot.
 
 This allows the UI and CLI to consume the same deterministic contract.
 
@@ -182,17 +195,20 @@ This allows the UI and CLI to consume the same deterministic contract.
 
 ## 16) Future Development
 
-- Add Hermes orchestration layer integration.
+- Expand Hermes orchestration from demo/runtime validation into configurable production agent tasks.
 - Add real calendar connectors (Google/Microsoft) behind explicit consent flows.
 - Add configurable organization policies for intervention routing thresholds.
 - Add message delivery integrations (email/chat) as optional execution adapters.
-- Add longitudinal trend views across weekly runs.
+- Expand longitudinal trend views across weekly runs.
 
 ## 17) AI Tools / Models Used
 
 - Cursor for development assistance.
-- Deterministic agent logic for MVP runtime behavior (no external model dependency required for current loop).
-- Hermes planned/optional runtime orchestration layer.
+- Hermes for agent runtime orchestration, validation runs, and multi-agent evaluation.
+- MiMo V2.5 Pro as the primary reasoning model used through Hermes for execution review and stress testing.
+- Deterministic in-repo agent logic for stable MVP runtime behavior and judge reproducibility.
+
+Mediary uses deterministic TypeScript modules for the core workload analysis loop, while Hermes + MiMo V2.5 Pro are used to orchestrate, inspect, and evaluate the autonomous agent workflow.
 
 ## 18) Submission Notes
 
@@ -200,3 +216,6 @@ This allows the UI and CLI to consume the same deterministic contract.
 - Mediary is not employee surveillance and not productivity policing.
 - Language focus: workload strain, workload diplomacy, intervention routing, focus erosion, meeting fragmentation.
 - Designed for judge reproducibility: deterministic outputs, explicit execution trace, and scenario-based CLI demos.
+- Core runtime outputs remain deterministic and reproducible.
+- Hermes + MiMo V2.5 Pro are used for orchestration, validation, and agentic evaluation.
+- The 4-week trend layer supports sustained overload detection without relying only on a single-week snapshot.
