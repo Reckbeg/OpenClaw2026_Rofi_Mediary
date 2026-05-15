@@ -174,6 +174,10 @@ export type InterventionQueueItem = {
   previousWeekRiskBucket?: RiskBucket;
   route: InterventionRoute;
   nextStep: string;
+  decisionRationale: string;
+  consideredAlternatives: string[];
+  actionArtifact: string;
+  followUpCadence: string;
 };
 
 export type MediaryLoopOutput = {

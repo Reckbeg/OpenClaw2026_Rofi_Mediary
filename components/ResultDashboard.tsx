@@ -105,6 +105,33 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </div>
           </div>
 
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Agent decision log</h3>
+            <div className="mt-3 space-y-2">
+              {result.interventionQueue.length === 0 && (
+                <div className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600">
+                  No decision packets generated because the org is in monitor state.
+                </div>
+              )}
+              {result.interventionQueue.slice(0, 3).map((item) => (
+                <div
+                  key={`decision-log-${item.employeeId}`}
+                  className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
+                >
+                  <p>
+                    Decision: {item.employeeName} ({item.team}) → {item.route}
+                  </p>
+                  <p className="mt-1 text-xs text-stone-600">Why this route: {item.decisionRationale}</p>
+                  <p className="mt-1 text-xs text-stone-600">
+                    Alternatives considered: {item.consideredAlternatives.join(" · ")}
+                  </p>
+                  <p className="mt-1 text-xs text-stone-600">Action artifact prepared: {item.actionArtifact}</p>
+                  <p className="mt-1 text-xs text-stone-600">Follow-up cadence: {item.followUpCadence}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {result.interventionQueue.some(
             (item) =>
               item.route === "High: employee nudge + manager brief" ||

@@ -27,11 +27,18 @@ function buildExecutionTrace({
   totalEmployees,
   teamCount,
   queueCount,
+  routeCounts,
 }: {
   scenario: DemoScenario;
   totalEmployees: number;
   teamCount: number;
   queueCount: number;
+  routeCounts: {
+    low: number;
+    medium: number;
+    high: number;
+    sustainedHigh: number;
+  };
 }): ExecutionTraceStep[] {
   return [
     {
@@ -61,15 +68,14 @@ function buildExecutionTrace({
       phase: "decide",
       name: "Route interventions",
       status: "completed",
-      output:
-        "Applied routing policy: Low=monitor, Medium=employee nudge, High=employee nudge + manager brief, Sustained High=HR Ops queue.",
+      output: `Applied routing policy with evidence from current risk, previous-week context, and 4-week trend. Route counts: Low=${routeCounts.low}, Medium=${routeCounts.medium}, High=${routeCounts.high}, Sustained High=${routeCounts.sustainedHigh}.`,
     },
     {
       step: 5,
       phase: "execute",
       name: "Generate stakeholder messages",
       status: "completed",
-      output: `Generated diplomatic messages and intervention queue entries for ${queueCount} routed employees.`,
+      output: `Generated ${queueCount} action packets with decision rationale, alternatives considered, action artifacts, and stakeholder-ready workflow messages.`,
     },
     {
       step: 6,
@@ -77,7 +83,7 @@ function buildExecutionTrace({
       name: "Follow-up plan",
       status: "completed",
       output:
-        "Scheduled deterministic weekly reassessment and trend comparison for all employees in the org dataset.",
+        "Scheduled route-based cadence: monitor routes weekly, medium routes in 7 days, high routes in 3 business days, and sustained-high routes in 48 hours plus weekly trend checks.",
     },
   ];
 }
@@ -280,6 +286,54 @@ function toQueueItem(detail: EmployeeLoopDetail): InterventionQueueItem {
         : detail.route === "Medium: employee nudge"
           ? `${strongestDriverNextStep(detail)} Send employee nudge with focused plan this week.`
           : "Monitor next run unless trend worsens.";
+  const decisionRationale =
+    detail.route === "Sustained High: HR Ops queue"
+      ? `Current risk is ${detail.scoring.overallRiskScore}/100 High, previous week context is ${previousWeekRiskScore}/100 ${previousWeekRiskBucket}, and the 4-week trend is ${detail.monthlyTrend.trendDirection} with sustained overload signals.`
+      : detail.route === "High: employee nudge + manager brief"
+        ? `Current risk remains high at ${detail.scoring.overallRiskScore}/100, with elevated weekly load signals and trend pressure requiring manager alignment this cycle.`
+        : detail.route === "Medium: employee nudge"
+          ? `Current risk is medium at ${detail.scoring.overallRiskScore}/100 with manageable strain signals, so employee-level operational adjustments are prioritized first.`
+          : `Current risk is low and stable, so monitor-only handling is appropriate for this cycle.`;
+  const consideredAlternatives =
+    detail.route === "Sustained High: HR Ops queue"
+      ? [
+          "High: employee nudge + manager brief",
+          "Medium: employee nudge",
+          "Low: no action or monitor",
+        ]
+      : detail.route === "High: employee nudge + manager brief"
+        ? [
+            "Sustained High: HR Ops queue",
+            "Medium: employee nudge",
+            "Low: no action or monitor",
+          ]
+        : detail.route === "Medium: employee nudge"
+          ? [
+              "High: employee nudge + manager brief",
+              "Low: no action or monitor",
+              "Sustained High: HR Ops queue",
+            ]
+          : [
+              "Medium: employee nudge",
+              "High: employee nudge + manager brief",
+              "Sustained High: HR Ops queue",
+            ];
+  const actionArtifact =
+    detail.route === "Sustained High: HR Ops queue"
+      ? "HR Ops escalation packet with manager brief, workload trend snapshot, and action checklist."
+      : detail.route === "High: employee nudge + manager brief"
+        ? "Manager alignment packet with employee nudge, meeting-load adjustments, and progress checklist."
+        : detail.route === "Medium: employee nudge"
+          ? "Employee nudge packet with focused scheduling actions and one-week checkpoint."
+          : "Monitor memo with weekly trend watchlist.";
+  const followUpCadence =
+    detail.route === "Sustained High: HR Ops queue"
+      ? "48-hour follow-up, then weekly until risk returns below sustained-high threshold."
+      : detail.route === "High: employee nudge + manager brief"
+        ? "3 business-day manager checkpoint, then weekly follow-up."
+        : detail.route === "Medium: employee nudge"
+          ? "7-day follow-up in next cycle."
+          : "Weekly monitor cadence.";
 
   return {
     employeeId: detail.employee.id,
@@ -291,6 +345,10 @@ function toQueueItem(detail: EmployeeLoopDetail): InterventionQueueItem {
     previousWeekRiskBucket,
     route: detail.route,
     nextStep,
+    decisionRationale,
+    consideredAlternatives,
+    actionArtifact,
+    followUpCadence,
   };
 }
 
@@ -451,6 +509,12 @@ export function runOrgMediaryLoop(input: MediaryLoopInput = {}): MediaryLoopOutp
   const sustainedHighCount = employeeDetails.filter(
     (detail) => detail.route === "Sustained High: HR Ops queue",
   ).length;
+  const routeCounts = {
+    low: employeeDetails.filter((detail) => detail.route === "Low: no action or monitor").length,
+    medium: employeeDetails.filter((detail) => detail.route === "Medium: employee nudge").length,
+    high: employeeDetails.filter((detail) => detail.route === "High: employee nudge + manager brief").length,
+    sustainedHigh: sustainedHighCount,
+  };
 
   const orgSummary: MediaryLoopOutput["orgSummary"] = {
     totalEmployees: employeeDetails.length,
@@ -500,6 +564,7 @@ export function runOrgMediaryLoop(input: MediaryLoopInput = {}): MediaryLoopOutp
       totalEmployees: employeeDetails.length,
       teamCount: teamHeatmap.length,
       queueCount: interventionQueue.length,
+      routeCounts,
     }),
     workflowStatus: "Autonomous org-wide workload diplomacy loop completed",
   };
