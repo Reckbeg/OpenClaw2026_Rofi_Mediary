@@ -1,32 +1,68 @@
 # Mediary
 
-An AI workplace diplomat that detects invisible overload patterns before they become burnout.
+Mediary is an AI workplace diplomat that detects invisible overload patterns before they become burnout.
+
+## Project Overview
+
+Mediary is built for HR and people teams in smaller organizations.  
+It helps teams spot workload strain early, explain why risk is rising, and suggest practical next steps.
+
+The demo shows a deterministic 3-agent workflow running on sample data, with live server-streamed progress in the web UI.
 
 ## Problem
 
-Small organizations often miss early workload strain signals because risk appears as distributed scheduling friction (meeting overload, focus erosion, after-hours pressure) rather than explicit incidents.
+Workload risk usually shows up gradually: too many meetings, low focus time, after-hours pressure, and repeated heavy weeks.  
+Without a consistent process, teams notice issues late and interventions become reactive.
 
-## Solution Overview
+## Solution
 
-Mediary runs a deterministic 3-agent cycle over org workload signals:
+Mediary analyzes these signals, groups people by risk level, and routes clear actions:
 
-1. Analyze risk and trends
-2. Route interventions by policy
-3. Execute internal action adapters and queue follow-ups
-4. Supervise run health and trace consistency
+- monitor only
+- employee nudge
+- manager brief
+- HR Ops route for sustained-high patterns
 
-The web demo includes live server-streamed progress, and the CLI returns the same core output contract.
+It also records action artifacts, follow-up tasks, and a supervisor review so each run is easy to inspect.
+
+## How It Works
+
+1. Read deterministic workload inputs (calendar + self-assessment + trend history)
+2. Score risk and detect sustained-high patterns
+3. Route interventions by policy
+4. Generate execution artifacts and follow-up queue
+5. Run supervisor checks and emit final output
+
+## Agent Workflow
+
+- **Aria Analyst**: scores risk and decides routing
+- **Ethan Executor**: runs internal execution adapters and creates artifacts
+- **Sol Supervisor**: checks anomalies, validates consistency, and reports org health
+
+Detailed architecture: `docs/architecture.md`
 
 ## Why This Is Agentic
 
-- Observes org-wide workload signals from deterministic calendar and self-assessment inputs
-- Reasons over risk drivers and 8-week trend context
-- Decides intervention routes (including HR Ops route for sustained-high workload pattern)
-- Executes deterministic internal execution adapters to produce action artifacts
-- Queues route-based follow-up tasks for next-cycle handling
-- Supervises pipeline consistency with org health checks and execution trace
+- Multi-step workflow with clear observe → decide → execute → review stages
+- Different agents own different responsibilities
+- Decisions are based on explicit risk signals and trend context
+- Executor produces concrete action artifacts and follow-ups
+- Supervisor checks run quality and consistency
+- Web demo streams live backend events during a run
 
-## Demo / Quick Start
+## Demo Scenarios
+
+- `baseline`: normal workload mix
+- `sustained-high`: deterministic high-strain scenario that triggers HR Ops routes
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Deterministic in-repo runtime logic (`src/`)
+
+## How To Run Locally
 
 ```bash
 npm install
@@ -40,77 +76,45 @@ Open:
 - [http://localhost:3000](http://localhost:3000)
 - [http://127.0.0.1:3000](http://127.0.0.1:3000)
 
-Web demo:
-
-- Primary CTA: `Run sustained-high agent cycle`
-- Live progress: `GET /api/agent-stream?scenario=sustained-high` (SSE)
-- Compatibility endpoint: `POST /api/analyze`
-
 ## Available Commands
 
 ```bash
-npm run agent                              # Single baseline run
-npm run agent -- --scenario=sustained-high # Single sustained-high run
-npm run loop                               # Multi-phase loop runner
-npm run loop -- --scenario=sustained-high  # Sustained-high loop run
-npm run multicycle -- --cycles=8           # 8-cycle demo with org drift
-npm run ack -- follow-up-3 --outcome='reduced meetings by 3h'  # Acknowledge follow-up
 npm run dev
+npm run dev:host
 npm run typecheck
 npm run build
+npm run agent
+npm run agent -- --scenario=sustained-high
+npm run loop
+npm run loop -- --scenario=sustained-high
 ```
-
-## 3-Agent Architecture (Short)
-
-- **Aria Analyst**: risk/trend reasoning and route decisions
-- **Ethan Executor**: internal tool execution adapters, action artifacts, follow-up queue, run ledger
-- **Sol Supervisor**: anomaly checks, org health assessment, execution trace
-
-Detailed architecture: `docs/architecture.md`
-
-## Key Capabilities
-
-- 3-agent pipeline: Analyst -> Executor -> Supervisor
-- 8-week workload trend reasoning
-- Risk routing and HR Ops escalation
-- Internal tool execution adapters
-- Action artifact generation
-- Follow-up task queue with ack-based feedback loop
-- Run ledger and local memory
-- SSE web streaming for live agent run visualization
-- Dynamic org data generator with week-over-week drift
-- Deliverable file writer (real .md artifacts to ~/.hermes/deliverables/)
-- Multi-cycle demo runner with cross-cycle follow-up consumption
-- Scheduled automation via cron (Mondays 9am)
-
-Mediary supports a stateful autonomous agent loop with local memory and cross-run continuity during repeated runs.
 
 ## Key Outputs
 
-- Org summary and monthly trend org summary
-- Intervention queue with routing rationale
-- Tool invocation log, action artifacts, and follow-up tasks
+- Org summary and trend summary
+- Intervention queue with route rationale
+- Tool invocation log, action artifacts, and follow-up queue
 - Run ledger, org health assessment, and execution trace
 
-Full field-level contract: `docs/output-contract.md`
+Full contract details: `docs/output-contract.md`
 
 ## Limitations
 
-- Uses deterministic sample org data for reproducibility
-- Internal execution adapters are deterministic simulations, not live external integrations
-- No live Slack, Calendar, HRIS, or email delivery integrations
-- Not a diagnosis tool; outputs focus on workload strain operations
-- Hermes and MiMo are not required runtime dependencies for local app execution
+- Uses deterministic sample data for reproducibility
+- Internal execution adapters are deterministic simulations
+- No live external integrations (Slack, Calendar, HRIS, email)
+- Not a diagnosis tool
+- Hermes and MiMo are not required to run the local app
 
 ## AI Tools Used
 
-- Cursor for development assistance
-- Hermes + MiMo V2.5 Pro for external operation/evaluation workflows during demo preparation
-- Deterministic in-repo TypeScript agent logic for local runtime behavior
+- Cursor for development support
+- Hermes + MiMo V2.5 Pro for external operation/evaluation during demo preparation
+- Deterministic TypeScript runtime as the local source of truth
 
-## Detailed Docs
+## Documentation
 
-- Architecture and component details: `docs/architecture.md`
-- Output contract and SSE event schema: `docs/output-contract.md`
-- Judge/submission framing and wording guardrails: `docs/submission-notes.md`
+- Architecture details: `docs/architecture.md`
+- Output contract and SSE events: `docs/output-contract.md`
+- Submission wording notes: `docs/submission-notes.md`
 - Hermes operating specs (public-safe): `hermes/README.md`
