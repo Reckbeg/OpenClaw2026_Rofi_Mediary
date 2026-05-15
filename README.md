@@ -105,12 +105,20 @@ Final Output: Loop Report + Execution Trace
 
 ### Agent Identity System
 
-Each agent has a defined identity (`src/agents/identity.ts`) with:
+Each agent has a defined identity with full persona documentation:
+
+- [`src/agents/identities/analyst.md`](src/agents/identities/analyst.md) — 🧠 Aria, Workload Signal Analyst
+- [`src/agents/identities/executor.md`](src/agents/identities/executor.md) — ⚡ Ethan, Action Artifact Executor
+- [`src/agents/identities/supervisor.md`](src/agents/identities/supervisor.md) — 🔍 Sol, Pipeline Supervisor
+
+Each identity file defines:
 - **Name and title** — Aria, Ethan, Sol
 - **Principles** — guiding rules for decision-making
 - **Personality** — communication style and approach
 - **Capabilities** — what the agent can do
 - **Limitations** — what the agent explicitly cannot do
+
+Runtime identity objects are in `src/agents/identity.ts`.
 
 ### Agent Memory System
 
