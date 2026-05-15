@@ -31,11 +31,12 @@ Mediary does not only summarize data. It:
 - observes workload signals,
 - reasons over risk drivers,
 - decides stakeholder-specific routing,
-- executes message generation, and
-- produces a follow-up plan.
+- executes message generation,
+- produces a follow-up plan, and
+- persists agent memory across runs to track org health over time.
 
 Workflow status phrase used in outputs:
-**“Autonomous org-wide workload diplomacy loop completed”**
+**"Autonomous org-wide workload diplomacy loop completed"**
 
 ## 6) Autonomous Workflow
 
@@ -48,14 +49,99 @@ Workflow status phrase used in outputs:
 
 ## 7) Agent Architecture
 
+### 3-Agent Pipeline
+
+Mediary uses a dedicated 3-agent pipeline where each agent owns specific responsibilities and explicitly does NOT do what the other agents do.
+
+```
+Org Data
+   ↓
+🧠 Aria (Analyst)    → scores, routes, simulates
+   ↓
+⚡ Ethan (Executor)   → invokes tools, creates artifacts, queues follow-ups
+   ↓
+🔍 Sol (Supervisor)   → validates, detects anomalies, assesses org health
+   ↓
+Final Output: Loop Report + Execution Trace
+```
+
+#### 🧠 Aria — The Analyst (Brain)
+
+**Role:** Pure reasoning agent, no side effects.
+
+- Computes composite risk scores from calendar metrics and self-assessment
+- Detects sustained overload patterns across 8-week trends
+- Aggregates team-level heatmaps with risk bucket classification
+- Routes employees into intervention tiers with evidence-based rationale
+- Drafts HR memos with org-wide summaries and trend context
+- Simulates impact projections based on intervention adherence assumptions
+
+**Does NOT:** invoke tools, create artifacts, or assess org health.
+
+#### ⚡ Ethan — The Executor (Hands)
+
+**Role:** Action-oriented agent, produces execution artifacts.
+
+- Invokes internal action adapters (EMPLOYEE_NUDGE_TOOL, MANAGER_BRIEF_TOOL, HR_OPS_CASE_TOOL, FOCUS_BLOCK_PLANNER, FOLLOW_UP_SCHEDULER)
+- Generates stakeholder-specific action artifacts with typed owners
+- Queues follow-up tasks with route-based cadences (48h, 3-day, 7-day)
+- Builds run ledgers that summarize autonomous execution
+- Tracks tool invocation counts and artifact delivery status
+
+**Does NOT:** score employees, decide routing, or assess org health.
+
+#### 🔍 Sol — The Supervisor (Watchdog)
+
+**Role:** Cross-cutting validation and org health monitoring.
+
+- Detects pipeline anomalies (zero interventions, missing tools, employee worsening)
+- Assesses org health with composite scoring (healthy/attention/critical)
+- Builds execution traces that document the full agent pipeline
+- Tracks cross-run trends in org health, anomalies, and agent performance
+- Validates consistency between Analyst routing and Executor tool invocations
+- Maintains escalation log for human-reviewed decisions
+
+**Does NOT:** score employees, invoke tools, or create artifacts.
+
+### Agent Identity System
+
+Each agent has a defined identity (`src/agents/identity.ts`) with:
+- **Name and title** — Aria, Ethan, Sol
+- **Principles** — guiding rules for decision-making
+- **Personality** — communication style and approach
+- **Capabilities** — what the agent can do
+- **Limitations** — what the agent explicitly cannot do
+
+### Agent Memory System
+
+Each agent persists memory across runs (`src/modules/state/agentMemory.ts`):
+- **Analyst memory** — risk score history, detected patterns, run count
+- **Executor memory** — tool invocation counts, delivery history, follow-up completion rates
+- **Supervisor memory** — anomaly history, org health trend, escalation log
+
+Memory files are stored at `.mediary/state/memory/{agent}-memory.json` and survive across runs, enabling the agents to reason over longitudinal trends.
+
+### Loop Infrastructure
+
+- **Run ledger** (`src/modules/state/ledgerStore.ts`) — persists run metadata across cycles
+- **Week comparison** (`src/modules/state/weekComparison.ts`) — computes week-over-week deltas
+- **Follow-up consumer** (`src/modules/state/followUpConsumer.ts`) — tracks follow-up task status and overdue items
+- **Loop runner** (`scripts/run-loop.ts`) — executes the full 5-phase loop via `npm run loop`
+
 Core agent source code:
-- `src/agents/runMediaryLoop.ts`
-- `src/agents/analyzerAgent.ts`
-- `src/agents/workflowDiplomatAgent.ts`
-- `src/modules/metrics/calendarMetrics.ts`
-- `src/modules/scoring/riskScore.ts`
-- `src/modules/routing/meetingRouter.ts`
-- `src/modules/messaging/diplomaticMessage.ts`
+- `src/agents/identity.ts` — agent persona definitions
+- `src/agents/analystAgent.ts` — Aria: risk scoring, routing, HR memo
+- `src/agents/executorAgent.ts` — Ethan: tool invocations, artifacts, follow-ups
+- `src/agents/supervisorAgent.ts` — Sol: anomaly detection, org health, execution trace
+- `src/agents/runMediaryLoop.ts` — orchestrator that calls the 3-agent pipeline
+- `src/modules/state/agentMemory.ts` — per-agent memory persistence
+- `src/modules/state/ledgerStore.ts` — run ledger persistence
+- `src/modules/state/weekComparison.ts` — week-over-week delta analysis
+- `src/modules/state/followUpConsumer.ts` — follow-up task consumption
+- `src/modules/metrics/calendarMetrics.ts` — calendar workload metrics
+- `src/modules/scoring/riskScore.ts` — risk scoring engine
+- `src/modules/routing/meetingRouter.ts` — intervention routing
+- `src/modules/messaging/diplomaticMessage.ts` — stakeholder messaging
 
 Key components:
 - **Calendar Parser Tool**: loads deterministic org-wide calendar events.
@@ -83,42 +169,50 @@ The submitted application runs locally without external model dependency for jud
 ## 8) Core Features
 
 1. Org-wide autonomous agent loop  
-2. Deterministic sample org dataset with 24 employees  
-3. Normalized team structure with 5 teams:
+2. **3-agent pipeline** (Analyst → Executor → Supervisor) with dedicated roles  
+3. **Agent identity system** with named personas (Aria, Ethan, Sol)  
+4. **Per-agent persistent memory** across runs  
+5. Deterministic sample org dataset with 24 employees  
+6. **8-week workload trend data** per employee for sustained pattern detection  
+7. Normalized team structure with 5 teams:
    - Product & Engineering
    - Customer Operations
    - Design & Quality
    - People & Program Operations
    - Business Operations
-4. Deterministic scoring engine  
-5. Calendar workload metrics  
-6. Self-assessment strain scoring  
-7. Risk buckets: Low, Medium, High, Sustained High  
-8. Intervention routing:
-   - Low: monitor only
-   - Medium: employee nudge
-   - High: employee nudge + manager brief
-   - Sustained High: HR Ops queue
-9. Driver-aware next steps  
-10. HR memo generation  
-11. Team heatmap  
-12. Intervention queue  
-13. Selected employee detail (Maya Chen)  
-14. Impact simulation (before/after projected org metrics)  
-15. Execution trace (observe → reason → decide → execute → follow-up)  
-16. CLI runner scenarios  
-17. Minimal UI rendering the same agent output through app/API pipeline  
-18. No auth, no database, no external integrations  
-19. 4-week workload trend signal  
-20. Monthly trend org summary  
-21. Previous week risk context  
-22. Manager coaching brief for high and sustained-high routes  
-23. Projected meeting hours reduced  
-24. Projected focus hours gained  
-25. Internal tool execution adapters (deterministic simulation)  
-26. Stakeholder-specific action artifact generation  
-27. Route-based follow-up task queue  
-28. Run ledger for each autonomous cycle
+8. Deterministic scoring engine  
+9. Calendar workload metrics  
+10. Self-assessment strain scoring  
+11. Risk buckets: Low (0–39), Medium (40–79), High (≥80), Sustained High  
+12. Intervention routing:
+    - Low: monitor only
+    - Medium: employee nudge
+    - High: employee nudge + manager brief
+    - Sustained High: HR Ops queue
+13. Driver-aware next steps  
+14. HR memo generation  
+15. Team heatmap  
+16. Intervention queue  
+17. Selected employee detail (Maya Chen)  
+18. Impact simulation (before/after projected org metrics)  
+19. **7-phase execution trace** (observe → reason → reason → decide → execute → follow-up → supervise)  
+20. CLI runner scenarios  
+21. **Loop runner** (`npm run loop`) for persistent autonomous cycles  
+22. Minimal UI rendering the same agent output through app/API pipeline  
+23. No auth, no database, no external integrations  
+24. Monthly trend org summary  
+25. Previous week risk context  
+26. Manager coaching brief for high and sustained-high routes  
+27. Projected meeting hours reduced  
+28. Projected focus hours gained  
+29. Internal tool execution adapters (deterministic simulation)  
+30. Stakeholder-specific action artifact generation  
+31. Route-based follow-up task queue  
+32. Run ledger for each autonomous cycle  
+33. **Week-over-week comparison** with delta analysis  
+34. **Follow-up task consumer** with overdue detection  
+35. **Anomaly detection** across agent pipeline  
+36. **Org health assessment** (healthy/attention/critical)
 
 ## 9) Demo Scenarios
 
@@ -150,44 +244,57 @@ Then open:
 
 ```bash
 npm install
-npm run agent
-npm run agent -- --scenario=sustained-high
-npm run dev
-npm run typecheck
-npm run build
+npm run agent                                    # Run single agent cycle (baseline)
+npm run agent -- --scenario=sustained-high       # Run sustained-high scenario
+npm run loop                                     # Run full 5-phase loop
+npm run loop -- --scenario=sustained-high        # Run loop with sustained-high scenario
+npm run dev                                      # Start Next.js dev server
+npm run typecheck                                # Type check
+npm run build                                    # Build
 ```
 
 ## 13) Repository Structure
 
-- `app/` - Next.js routes and API endpoint
-- `components/` - dashboard UI components
-- `src/agents/` - autonomous loop + agent logic
-- `src/modules/` - metrics, scoring, routing, messaging modules
-- `src/data/` - deterministic sample org dataset
-- `src/types/` - output contracts and shared types
-- `scripts/` - CLI runner
+- `app/` — Next.js routes and API endpoint
+- `components/` — dashboard UI components
+- `src/agents/` — 3-agent pipeline (analyst, executor, supervisor) + orchestrator
+- `src/agents/identity.ts` — agent persona definitions
+- `src/modules/` — metrics, scoring, routing, messaging modules
+- `src/modules/state/` — agent memory, run ledger, week comparison, follow-up consumer
+- `src/data/` — deterministic sample org dataset (8 weeks per employee)
+- `src/types/` — output contracts and shared types
+- `scripts/` — CLI runner and loop runner
+- `.mediary/state/` — runtime state (ledgers, memory) — gitignored
 
 ## 14) Output Contract
 
 The top-level agent output includes:
-- `scenario`
-- `orgSummary`
-- `monthlyTrendOrgSummary`
-- `monthlyTrendByEmployee`
-- `teamHeatmap`
-- `interventionQueue`
-- `hrMemo`
-- `impactSimulation`
-  - `projectedMeetingHoursReduced`
-  - `projectedFocusHoursGained`
-- `selectedEmployeeDetail`
-  - `monthlyTrend`
-- `toolInvocations`
-- `actionArtifacts`
-- `followUpTasks`
-- `runLedger`
-- `executionTrace`
-- `workflowStatus`
+
+**Analyst Output:**
+- `identity` — Aria's persona and capabilities
+- `memory` — analyst's persistent memory across runs
+- `orgSummary` — org-wide risk distribution
+- `monthlyTrendOrgSummary` — trend summary across all employees
+- `monthlyTrendByEmployee` — per-employee 8-week trend data
+- `teamHeatmap` — team-level risk aggregation
+- `interventionQueue` — routed employees with rationale
+- `hrMemo` — HR-facing org summary
+- `impactSimulation` — projected intervention outcomes
+
+**Executor Output:**
+- `identity` — Ethan's persona and capabilities
+- `memory` — executor's persistent memory across runs
+- `toolInvocations` — internal tool execution log
+- `actionArtifacts` — stakeholder-specific deliverables
+- `followUpTasks` — queued follow-up tasks with cadences
+- `runLedger` — run metadata and execution summary
+
+**Supervisor Output:**
+- `identity` — Sol's persona and capabilities
+- `memory` — supervisor's persistent memory across runs
+- `orgHealth` — composite org health assessment (healthy/attention/critical)
+- `executionTrace` — 7-phase pipeline execution log
+- `loopReport` — summaries from all three agents
 
 The monthly trend fields allow Mediary to reason over sustained workload patterns instead of only a single-week snapshot.
 
@@ -227,8 +334,9 @@ The submitted application does not require Hermes or MiMo to run locally. They w
 - Designed for judge reproducibility: deterministic outputs, explicit execution trace, and scenario-based CLI demos.
 - Core runtime outputs remain deterministic and reproducible.
 - Hermes + MiMo V2.5 Pro are used for orchestration, validation, and agentic evaluation.
-- The 4-week trend layer supports sustained overload detection without relying only on a single-week snapshot.
-- Mediary is a single-cycle autonomous workload diplomacy loop.
-- It is not a persistent production agent yet.
-- Follow-up cadence is represented as declared next-cycle intent, not a real scheduled job.
+- The **8-week trend layer** supports sustained overload detection without relying only on a single-week snapshot.
+- The **3-agent pipeline** with dedicated roles (Analyst, Executor, Supervisor) demonstrates clear separation of concerns.
+- **Agent memory** persists across runs, enabling longitudinal reasoning and pattern detection.
+- **Anomaly detection** and **org health assessment** provide self-monitoring capabilities.
+- Mediary is now a **persistent autonomous agent loop** with state, memory, and cross-run continuity.
 - No external calendar, HR, or messaging systems are modified.
