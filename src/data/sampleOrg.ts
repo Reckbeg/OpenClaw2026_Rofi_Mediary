@@ -1,4 +1,12 @@
-import type { CalendarEvent, Employee, OrgDataset, Weekday } from "@/src/types/mediary";
+import type {
+  CalendarEvent,
+  DemoScenario,
+  Employee,
+  OrgDataset,
+  RiskBucket,
+  Weekday,
+  WeeklyRiskSnapshot,
+} from "@/src/types/mediary";
 
 const employeeSeeds = [
   ["maya-chen", "Maya Chen", "Product Operations Lead", "Platform Experience", "Lina Park"],
@@ -28,6 +36,7 @@ const employeeSeeds = [
 ];
 
 const weekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const monthWeekLabels = ["Week 1", "Week 2", "Week 3", "Week 4"] as const;
 
 const baseBlueprint: Omit<CalendarEvent, "id" | "owner">[] = [
   { title: "Daily platform standup", day: "Monday", start: "09:00", end: "09:30", attendees: ["Platform"], isRecurring: true },
@@ -110,11 +119,180 @@ function buildCalendarsByEmployee(employees: Employee[]): Record<string, Calenda
   );
 }
 
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function roundToOneDecimal(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
+function toRiskBucket(riskScore: number): RiskBucket {
+  if (riskScore >= 80) return "High";
+  if (riskScore >= 40) return "Medium";
+  return "Low";
+}
+
+function buildBaselineMonthlyHistory(seedIndex: number): WeeklyRiskSnapshot[] {
+  const weekRiskDrift = [-2, 0, 1, -1];
+  const weekMeetingDrift = [-0.5, 0, 0.5, 0];
+  const baseMeetingHours = 14 + (seedIndex % 6) * 1.6;
+  const baseBackToBackDays = 1 + (seedIndex % 3);
+  const baseAfterHoursMeetings = seedIndex % 4 === 0 ? 0 : 1;
+  const baseSelfAssessmentScore = 32 + (seedIndex % 5) * 7;
+  const baseRiskScore = 30 + (seedIndex % 6) * 7;
+
+  return monthWeekLabels.map((weekLabel, weekIndex) => {
+    const weeklyMeetingHours = roundToOneDecimal(baseMeetingHours + weekMeetingDrift[weekIndex]);
+    const meetingRatio = roundToOneDecimal(weeklyMeetingHours / 40);
+    const backToBackDays = clamp(
+      baseBackToBackDays + (weekIndex === 2 && seedIndex % 2 === 0 ? 1 : 0),
+      1,
+      4,
+    );
+    const afterHoursMeetings = clamp(
+      baseAfterHoursMeetings + (weekIndex === 3 && seedIndex % 3 === 0 ? 1 : 0),
+      0,
+      2,
+    );
+    const estimatedFocusHours = roundToOneDecimal(
+      clamp(40 - weeklyMeetingHours - backToBackDays * 1.2 - afterHoursMeetings * 0.5, 10, 25),
+    );
+    const selfAssessmentScore = clamp(baseSelfAssessmentScore + weekRiskDrift[weekIndex], 25, 70);
+    const riskScore = clamp(baseRiskScore + weekRiskDrift[weekIndex], 20, 75);
+
+    return {
+      weekLabel,
+      weeklyMeetingHours,
+      meetingRatio,
+      backToBackDays,
+      afterHoursMeetings,
+      estimatedFocusHours,
+      selfAssessmentScore,
+      riskScore,
+      riskBucket: toRiskBucket(riskScore),
+    };
+  });
+}
+
+function buildWeeklyHistoryByEmployee(employees: Employee[]): Record<string, WeeklyRiskSnapshot[]> {
+  return Object.fromEntries(
+    employees.map((employee, index) => [employee.id, buildBaselineMonthlyHistory(index)]),
+  );
+}
+
+const sustainedHighHistoryOverrides: Record<string, WeeklyRiskSnapshot[]> = {
+  "alex-johnson": [
+    {
+      weekLabel: "Week 1",
+      weeklyMeetingHours: 24,
+      meetingRatio: 0.6,
+      backToBackDays: 4,
+      afterHoursMeetings: 2,
+      estimatedFocusHours: 11,
+      selfAssessmentScore: 72,
+      riskScore: 79,
+      riskBucket: "Medium",
+    },
+    {
+      weekLabel: "Week 2",
+      weeklyMeetingHours: 26.5,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 9,
+      selfAssessmentScore: 79,
+      riskScore: 85,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 3",
+      weeklyMeetingHours: 28,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 8,
+      selfAssessmentScore: 84,
+      riskScore: 89,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 4",
+      weeklyMeetingHours: 29,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 4,
+      estimatedFocusHours: 7,
+      selfAssessmentScore: 88,
+      riskScore: 92,
+      riskBucket: "High",
+    },
+  ],
+  "olivia-clark": [
+    {
+      weekLabel: "Week 1",
+      weeklyMeetingHours: 23.5,
+      meetingRatio: 0.6,
+      backToBackDays: 4,
+      afterHoursMeetings: 2,
+      estimatedFocusHours: 11.5,
+      selfAssessmentScore: 70,
+      riskScore: 78,
+      riskBucket: "Medium",
+    },
+    {
+      weekLabel: "Week 2",
+      weeklyMeetingHours: 25.5,
+      meetingRatio: 0.6,
+      backToBackDays: 5,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 9.5,
+      selfAssessmentScore: 77,
+      riskScore: 84,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 3",
+      weeklyMeetingHours: 27.5,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 8.5,
+      selfAssessmentScore: 82,
+      riskScore: 88,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 4",
+      weeklyMeetingHours: 28.5,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 4,
+      estimatedFocusHours: 7.5,
+      selfAssessmentScore: 87,
+      riskScore: 91,
+      riskBucket: "High",
+    },
+  ],
+};
+
 export const sampleOrgDataset: OrgDataset = (() => {
   const employees = buildEmployees();
   const calendarsByEmployee = buildCalendarsByEmployee(employees);
-  return { employees, calendarsByEmployee };
+  const weeklyHistoryByEmployee = buildWeeklyHistoryByEmployee(employees);
+  return { employees, calendarsByEmployee, weeklyHistoryByEmployee };
 })();
+
+export function getScenarioWeeklyHistory(employeeId: string, scenario: DemoScenario): WeeklyRiskSnapshot[] {
+  if (scenario === "sustained-high") {
+    const overridden = sustainedHighHistoryOverrides[employeeId];
+    if (overridden) {
+      return overridden.map((snapshot) => ({ ...snapshot }));
+    }
+  }
+
+  return (sampleOrgDataset.weeklyHistoryByEmployee[employeeId] ?? []).map((snapshot) => ({ ...snapshot }));
+}
 
 export const defaultEmployeeId = sampleOrgDataset.employees[0].id;
 export const supportedWeekdays = weekdays;

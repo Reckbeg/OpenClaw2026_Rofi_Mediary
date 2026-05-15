@@ -80,6 +80,9 @@ export default function Home() {
       <div className="mb-6 rounded-2xl border border-stone-200 bg-white/80 p-4 text-sm text-stone-700 shadow-sm">
         Org-wide run analyzes all {sampleOrgDataset.employees.length} employees first, then displays selected employee detail for {selectedEmployee.name}.
       </div>
+      <p className="mb-6 text-sm text-stone-500">
+        Operational workload assistant, not a medical diagnosis tool.
+      </p>
 
       {error && (
         <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">

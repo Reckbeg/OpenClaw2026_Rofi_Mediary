@@ -13,6 +13,11 @@ const riskStyles: Record<RiskBucket, string> = {
   High: "bg-rose-100 text-rose-800",
 };
 
+function toManagerAction(nextStep: string): string {
+  const firstSentence = nextStep.split(". ")[0]?.trim() ?? nextStep;
+  return `Manager action: ${firstSentence.replace(/\.$/, "")}.`;
+}
+
 export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
   return (
     <section className="rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-sm">
@@ -55,6 +60,11 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             <p className="mt-2 text-sm text-emerald-900/90">
               Low {result.orgSummary.lowRiskCount} · Medium {result.orgSummary.mediumRiskCount} · High {result.orgSummary.highRiskCount} · Sustained High {result.orgSummary.sustainedHighCount}
             </p>
+            <p className="mt-2 text-sm text-emerald-900/90">
+              4-week trend: worsening {result.monthlyTrendOrgSummary.worseningCount} · improving{" "}
+              {result.monthlyTrendOrgSummary.improvingCount} · sustained pattern{" "}
+              {result.monthlyTrendOrgSummary.sustainedPatternCount}
+            </p>
           </div>
 
           <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
@@ -84,10 +94,47 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
               {result.interventionQueue.slice(0, 5).map((item) => (
                 <div key={item.employeeId} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
                   {item.employeeName} ({item.team}) · {item.riskScore}/100 {item.riskBucket} · {item.route}
+                  {typeof item.previousWeekRiskScore === "number" && item.previousWeekRiskBucket && (
+                    <p className="mt-1 text-xs text-stone-600">
+                      Previous week: {item.previousWeekRiskScore}/100 {item.previousWeekRiskBucket}
+                    </p>
+                  )}
+                  <p className="mt-1 text-xs text-stone-600">Next step: {item.nextStep}</p>
                 </div>
               ))}
             </div>
           </div>
+
+          {result.interventionQueue.some(
+            (item) =>
+              item.route === "High: employee nudge + manager brief" ||
+              item.route === "Sustained High: HR Ops queue",
+          ) && (
+            <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+              <h3 className="font-semibold text-stone-950">Manager coaching brief</h3>
+              <div className="mt-3 space-y-2">
+                {result.interventionQueue
+                  .filter(
+                    (item) =>
+                      item.route === "High: employee nudge + manager brief" ||
+                      item.route === "Sustained High: HR Ops queue",
+                  )
+                  .sort((a, b) => b.riskScore - a.riskScore)
+                  .slice(0, 3)
+                  .map((item) => (
+                    <div
+                      key={`manager-brief-${item.employeeId}`}
+                      className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
+                    >
+                      <p>
+                        {item.employeeName} ({item.team}) · {item.route}
+                      </p>
+                      <p className="mt-1 text-xs text-stone-600">{toManagerAction(item.nextStep)}</p>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
 
           <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
             <h3 className="font-semibold text-stone-950">Impact simulation</h3>
@@ -98,6 +145,12 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </p>
             <p className="mt-1 text-sm text-stone-700">
               Queue {result.impactSimulation.before.interventionQueueCount} → {result.impactSimulation.after.projectedInterventionQueueCount}
+            </p>
+            <p className="mt-1 text-sm text-stone-700">
+              Projected meeting hours reduced: {result.impactSimulation.projectedMeetingHoursReduced}h
+            </p>
+            <p className="mt-1 text-sm text-stone-700">
+              Projected focus hours gained: {result.impactSimulation.projectedFocusHoursGained}h
             </p>
             <div className="mt-3 space-y-1">
               {result.impactSimulation.assumptions.map((assumption) => (
@@ -122,6 +175,22 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
           </div>
 
           <MetricsCards scoring={result.selectedEmployeeDetail.scoring} />
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">4-week trend signal</h3>
+            <div className="mt-2 grid gap-2 text-sm text-stone-700 md:grid-cols-2">
+              <p>Trend direction: {result.selectedEmployeeDetail.monthlyTrend.trendDirection}</p>
+              <p>High-risk weeks: {result.selectedEmployeeDetail.monthlyTrend.highRiskWeeks}</p>
+              <p>Risk delta: {result.selectedEmployeeDetail.monthlyTrend.riskDelta}</p>
+              <p>
+                Sustained pattern detected:{" "}
+                {result.selectedEmployeeDetail.monthlyTrend.sustainedPatternDetected ? "Yes" : "No"}
+              </p>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-stone-700">
+              {result.selectedEmployeeDetail.monthlyTrend.summary}
+            </p>
+          </div>
 
           <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
             <h3 className="font-semibold text-stone-950">Agent execution trace</h3>

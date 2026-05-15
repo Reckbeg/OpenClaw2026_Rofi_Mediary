@@ -23,6 +23,7 @@ export type Employee = {
 export type OrgDataset = {
   employees: Employee[];
   calendarsByEmployee: Record<string, CalendarEvent[]>;
+  weeklyHistoryByEmployee: Record<string, WeeklyRiskSnapshot[]>;
 };
 
 export type SelfAssessmentQuestion = {
@@ -45,6 +46,28 @@ export type CalendarMetrics = {
 };
 
 export type RiskBucket = "Low" | "Medium" | "High";
+
+export type WeeklyRiskSnapshot = {
+  weekLabel: string;
+  weeklyMeetingHours: number;
+  meetingRatio: number;
+  backToBackDays: number;
+  afterHoursMeetings: number;
+  estimatedFocusHours: number;
+  selfAssessmentScore: number;
+  riskScore: number;
+  riskBucket: RiskBucket;
+};
+
+export type MonthlyTrendSummary = {
+  employeeId: string;
+  trendDirection: "improving" | "stable" | "worsening";
+  highRiskWeeks: number;
+  mediumOrHighWeeks: number;
+  riskDelta: number;
+  sustainedPatternDetected: boolean;
+  summary: string;
+};
 
 export type ScoringResult = {
   overallRiskScore: number;
@@ -118,6 +141,7 @@ export type InterventionRoute =
 export type EmployeeLoopDetail = {
   employee: Employee;
   scoring: ScoringResult;
+  monthlyTrend: MonthlyTrendSummary;
   analyzer: AnalyzerOutput;
   diplomat: WorkflowDiplomatOutput;
   route: InterventionRoute;
@@ -146,6 +170,8 @@ export type InterventionQueueItem = {
   team: string;
   riskScore: number;
   riskBucket: RiskBucket;
+  previousWeekRiskScore?: number;
+  previousWeekRiskBucket?: RiskBucket;
   route: InterventionRoute;
   nextStep: string;
 };
@@ -153,10 +179,18 @@ export type InterventionQueueItem = {
 export type MediaryLoopOutput = {
   scenario: DemoScenario;
   orgSummary: OrgSummary;
+  monthlyTrendOrgSummary: {
+    worseningCount: number;
+    improvingCount: number;
+    sustainedPatternCount: number;
+  };
+  monthlyTrendByEmployee: Record<string, MonthlyTrendSummary>;
   teamHeatmap: TeamHeatmapItem[];
   interventionQueue: InterventionQueueItem[];
   hrMemo: string;
   impactSimulation: {
+    projectedMeetingHoursReduced: number;
+    projectedFocusHoursGained: number;
     before: {
       avgRiskScore: number;
       highRiskCount: number;
