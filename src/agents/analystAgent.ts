@@ -168,7 +168,7 @@ function strongestDriverNextStep(detail: EmployeeLoopDetail): string {
 function toQueueItem(detail: EmployeeLoopDetail): InterventionQueueItem {
   const decisionRationale =
     detail.route === "Sustained High: HR Ops queue"
-      ? `Current risk is ${detail.scoring.overallRiskScore}/100 ${detail.scoring.riskBucket}, previous week context is ${getPreviousWeekRiskScore(detail)}/100, and the 4-week trend is ${detail.monthlyTrend.trendDirection} with sustained overload signals.`
+      ? `Current risk is ${detail.scoring.overallRiskScore}/100 ${detail.scoring.riskBucket}, previous week context is ${getPreviousWeekRiskScore(detail)}/100, and the 8-week trend is ${detail.monthlyTrend.trendDirection} with sustained overload signals.`
       : detail.route === "High: employee nudge + manager brief"
         ? `Current risk is ${detail.scoring.overallRiskScore}/100 ${detail.scoring.riskBucket} with active strain signals requiring manager awareness.`
         : `Current risk is ${detail.scoring.overallRiskScore}/100 ${detail.scoring.riskBucket} with manageable strain signals.`;
@@ -246,8 +246,8 @@ function buildHrMemo(
   const urgentCount = queue.filter((item) => item.route === "Sustained High: HR Ops queue").length;
   const sustainedTrendLine =
     monthlyTrendOrgSummary.sustainedPatternCount > 0
-      ? `${monthlyTrendOrgSummary.sustainedPatternCount} employees show sustained overload across the 4-week trend and are routed to HR Ops.`
-      : "No employees show sustained overload across the 4-week trend.";
+      ? `${monthlyTrendOrgSummary.sustainedPatternCount} employees show sustained overload across the 8-week trend and are routed to HR Ops.`
+      : "No employees show sustained overload across the 8-week trend.";
   const followThroughLine =
     summary.highRiskCount > 0
       ? "Continue weekly monitoring with manager follow-through on medium and high routes."

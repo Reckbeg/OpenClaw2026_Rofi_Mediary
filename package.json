@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit",
     "agent": "tsx scripts/run-agent.ts",
     "loop": "tsx scripts/run-loop.ts",
+    "ack": "tsx scripts/run-ack.ts",
+    "multicycle": "tsx scripts/run-multicycle.ts",
     "test": "vitest run"
   },
   "keywords": [],

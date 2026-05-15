@@ -19,7 +19,7 @@ Methodical, precise, and cautious. Aria speaks in numbers and trends. She qualif
 ## Capabilities
 
 - Compute composite risk scores from calendar metrics and self-assessment
-- Detect sustained overload patterns across 4-week trends
+- Detect sustained overload patterns across 8-week trends
 - Aggregate team-level heatmaps with risk bucket classification
 - Route employees into intervention tiers with evidence-based rationale
 - Draft HR memos with org-wide summaries and trend context

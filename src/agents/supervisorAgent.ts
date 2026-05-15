@@ -173,14 +173,14 @@ function buildExecutionTrace({
       phase: "reason",
       name: "Analyst: Aggregate team risk",
       status: "completed",
-      output: `Compared 4-week workload trend and detected sustained overload patterns, then aggregated team heatmap across ${analyst.teamHeatmap.length} teams with risk buckets and average risk scores.`,
+      output: `Compared 8-week workload trend and detected sustained overload patterns, then aggregated team heatmap across ${analyst.teamHeatmap.length} teams with risk buckets and average risk scores.`,
     },
     {
       step: 4,
       phase: "decide",
       name: "Analyst: Route interventions",
       status: "completed",
-      output: `Applied routing policy with evidence from current risk, previous-week context, and 4-week trend. Routes: HR Ops=${routeCounts.hrOps}, manager brief=${routeCounts.managerBrief}, employee nudges=${routeCounts.employeeNudges}, monitor-only=${routeCounts.monitorOnly}.`,
+      output: `Applied routing policy with evidence from current risk, previous-week context, and 8-week trend. Routes: HR Ops=${routeCounts.hrOps}, manager brief=${routeCounts.managerBrief}, employee nudges=${routeCounts.employeeNudges}, monitor-only=${routeCounts.monitorOnly}.`,
     },
     {
       step: 5,

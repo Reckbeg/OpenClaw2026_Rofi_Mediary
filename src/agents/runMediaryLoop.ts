@@ -68,14 +68,14 @@ function buildExecutionTrace({
       phase: "reason",
       name: "Aggregate team risk",
       status: "completed",
-      output: `Compared 4-week workload trend and detected sustained overload patterns, then aggregated team heatmap across ${teamCount} teams with risk buckets and average risk scores.`,
+      output: `Compared 8-week workload trend and detected sustained overload patterns, then aggregated team heatmap across ${teamCount} teams with risk buckets and average risk scores.`,
     },
     {
       step: 4,
       phase: "decide",
       name: "Route interventions",
       status: "completed",
-      output: `Applied routing policy with evidence from current risk, previous-week context, and 4-week trend. Routes: HR Ops=${routeCounts.hrOps}, manager brief=${routeCounts.managerBrief}, employee nudges=${routeCounts.employeeNudges}, monitor-only=${routeCounts.monitorOnly}.`,
+      output: `Applied routing policy with evidence from current risk, previous-week context, and 8-week trend. Routes: HR Ops=${routeCounts.hrOps}, manager brief=${routeCounts.managerBrief}, employee nudges=${routeCounts.employeeNudges}, monitor-only=${routeCounts.monitorOnly}.`,
     },
     {
       step: 5,
@@ -156,10 +156,10 @@ function getMonthlyTrendSummary(
 
   const summary =
     trendDirection === "worsening"
-      ? `Risk trend worsened by ${riskDelta} points over 4 weeks, with ${highRiskWeeks} high-risk week(s).`
+      ? `Risk trend worsened by ${riskDelta} points over 8 weeks, with ${highRiskWeeks} high-risk week(s).`
       : trendDirection === "improving"
-        ? `Risk trend improved by ${Math.abs(riskDelta)} points over 4 weeks, with ${highRiskWeeks} high-risk week(s).`
-        : `Risk trend stayed stable over 4 weeks, with ${highRiskWeeks} high-risk week(s).`;
+        ? `Risk trend improved by ${Math.abs(riskDelta)} points over 8 weeks, with ${highRiskWeeks} high-risk week(s).`
+        : `Risk trend stayed stable over 8 weeks, with ${highRiskWeeks} high-risk week(s).`;
 
   return {
     employeeId,
@@ -295,7 +295,7 @@ function toQueueItem(detail: EmployeeLoopDetail): InterventionQueueItem {
           : "Monitor next run unless trend worsens.";
   const decisionRationale =
     detail.route === "Sustained High: HR Ops queue"
-      ? `Current risk is ${detail.scoring.overallRiskScore}/100 High, previous week context is ${previousWeekRiskScore}/100 ${previousWeekRiskBucket}, and the 4-week trend is ${detail.monthlyTrend.trendDirection} with sustained overload signals.`
+      ? `Current risk is ${detail.scoring.overallRiskScore}/100 High, previous week context is ${previousWeekRiskScore}/100 ${previousWeekRiskBucket}, and the 8-week trend is ${detail.monthlyTrend.trendDirection} with sustained overload signals.`
       : detail.route === "High: employee nudge + manager brief"
         ? `Current risk remains high at ${detail.scoring.overallRiskScore}/100, with elevated weekly load signals and trend pressure requiring manager alignment this cycle.`
         : detail.route === "Medium: employee nudge"
@@ -613,8 +613,8 @@ function buildHrMemo(
   const urgentCount = queue.filter((item) => item.route === "Sustained High: HR Ops queue").length;
   const sustainedTrendLine =
     monthlyTrendOrgSummary.sustainedPatternCount > 0
-      ? `${monthlyTrendOrgSummary.sustainedPatternCount} employees show sustained overload across the 4-week trend and are routed to HR Ops.`
-      : "No employees show sustained overload across the 4-week trend.";
+      ? `${monthlyTrendOrgSummary.sustainedPatternCount} employees show sustained overload across the 8-week trend and are routed to HR Ops.`
+      : "No employees show sustained overload across the 8-week trend.";
   const followThroughLine =
     summary.highRiskCount > 0
       ? "Continue weekly monitoring with manager follow-through on medium and high routes."
