@@ -56,7 +56,7 @@ export function computeRiskScore(
 }
 
 function getRiskBucket(score: number): RiskBucket {
-  if (score >= 70) {
+  if (score >= 80) {
     return "High";
   }
 

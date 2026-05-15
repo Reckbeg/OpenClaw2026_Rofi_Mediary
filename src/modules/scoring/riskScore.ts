@@ -5,7 +5,7 @@ function clamp(value: number): number {
 }
 
 function getRiskBucket(score: number): RiskBucket {
-  if (score >= 70) return "High";
+  if (score >= 80) return "High";
   if (score >= 40) return "Medium";
   return "Low";
 }

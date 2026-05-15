@@ -254,7 +254,7 @@ function toHeatmap(details: EmployeeLoopDetail[]): TeamHeatmapItem[] {
         teamMembers.reduce((sum, member) => sum + member.scoring.overallRiskScore, 0) / teamMembers.length,
       );
       const highRiskMembers = teamMembers.filter((member) => member.scoring.riskBucket === "High").length;
-      const riskBucket: RiskBucket = avgRiskScore >= 70 ? "High" : avgRiskScore >= 40 ? "Medium" : "Low";
+      const riskBucket: RiskBucket = avgRiskScore >= 80 ? "High" : avgRiskScore >= 40 ? "Medium" : "Low";
       return {
         team,
         avgRiskScore,
