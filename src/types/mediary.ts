@@ -114,7 +114,108 @@ export type WorkflowDiplomatOutput = {
   cleanedWeekPreview: CleanedDayPreview[];
 };
 
-export type ExecutionPhase = "observe" | "reason" | "decide" | "execute" | "follow-up";
+export type ExecutionPhase = "observe" | "reason" | "decide" | "execute" | "follow-up" | "supervise";
+
+export type AgentRole = "analyst" | "executor" | "supervisor";
+
+export type AgentIdentity = {
+  role: AgentRole;
+  name: string;
+  title: string;
+  principles: string[];
+  personality: string;
+  capabilities: string[];
+  limitations: string[];
+};
+
+export type AnalystMemory = {
+  lastRunDate: string | null;
+  runCount: number;
+  employeeRiskHistory: Record<string, Array<{ date: string; score: number; bucket: RiskBucket }>>;
+  thresholdAdjustments: Array<{ date: string; field: string; oldValue: number; newValue: number; reason: string }>;
+  trendPatternsDetected: Array<{ employeeId: string; pattern: string; detectedDate: string; stillActive: boolean }>;
+  scoringConfidence: number;
+  notes: string[];
+};
+
+export type ExecutorMemory = {
+  lastRunDate: string | null;
+  runCount: number;
+  toolsInvokedTotal: number;
+  artifactsDeliveredTotal: number;
+  followUpsCompleted: number;
+  followUpsMissed: number;
+  deliveryLog: Array<{ date: string; employeeId: string; artifactType: string; status: "delivered" | "failed" | "pending" }>;
+  toolPerformance: Record<string, { invoked: number; successRate: number }>;
+  notes: string[];
+};
+
+export type SupervisorMemory = {
+  lastRunDate: string | null;
+  runCount: number;
+  anomaliesSeen: Array<{ date: string; code: string; severity: string; resolved: boolean }>;
+  orgHealthTrend: Array<{ date: string; score: number; status: string }>;
+  escalationLog: Array<{ date: string; employeeId: string; reason: string; outcome: string }>;
+  agentPerformance: {
+    analyst: { runs: number; avgConfidence: number };
+    executor: { runs: number; deliveryRate: number };
+  };
+  notes: string[];
+};
+
+export type AgentMemoryMap = {
+  analyst: AnalystMemory;
+  executor: ExecutorMemory;
+  supervisor: SupervisorMemory;
+};
+
+export type SupervisorAnomaly = {
+  severity: "info" | "warning" | "critical";
+  code: string;
+  message: string;
+  affectedEmployees: string[];
+};
+
+export type OrgHealthAssessment = {
+  status: "healthy" | "attention" | "critical";
+  score: number;
+  anomalies: SupervisorAnomaly[];
+  recommendation: string;
+};
+
+export type AnalystOutput = {
+  identity: AgentIdentity;
+  memory: AnalystMemory;
+  employeeDetails: EmployeeLoopDetail[];
+  orgSummary: OrgSummary;
+  monthlyTrendOrgSummary: MediaryLoopOutput["monthlyTrendOrgSummary"];
+  monthlyTrendByEmployee: MediaryLoopOutput["monthlyTrendByEmployee"];
+  teamHeatmap: TeamHeatmapItem[];
+  interventionQueue: InterventionQueueItem[];
+  hrMemo: string;
+  impactSimulation: MediaryLoopOutput["impactSimulation"];
+};
+
+export type ExecutorOutput = {
+  identity: AgentIdentity;
+  memory: ExecutorMemory;
+  toolInvocations: ToolInvocation[];
+  actionArtifacts: ActionArtifact[];
+  followUpTasks: FollowUpTask[];
+  runLedger: RunLedger;
+};
+
+export type SupervisorOutput = {
+  identity: AgentIdentity;
+  memory: SupervisorMemory;
+  orgHealth: OrgHealthAssessment;
+  executionTrace: ExecutionTraceStep[];
+  loopReport: {
+    analystSummary: string;
+    executorSummary: string;
+    supervisorSummary: string;
+  };
+};
 
 export type ExecutionTraceStep = {
   step: number;
@@ -266,6 +367,7 @@ export type MediaryLoopOutput = {
   actionArtifacts: ActionArtifact[];
   followUpTasks: FollowUpTask[];
   runLedger: RunLedger;
+  orgHealth: OrgHealthAssessment;
   executionTrace: ExecutionTraceStep[];
   workflowStatus: "Autonomous org-wide workload diplomacy loop completed";
 };

@@ -36,7 +36,7 @@ const employeeSeeds = [
 ];
 
 const weekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-const monthWeekLabels = ["Week 1", "Week 2", "Week 3", "Week 4"] as const;
+const monthWeekLabels = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"] as const;
 
 const baseBlueprint: Omit<CalendarEvent, "id" | "owner">[] = [
   { title: "Daily platform standup", day: "Monday", start: "09:00", end: "09:30", attendees: ["Platform"], isRecurring: true },
@@ -134,8 +134,8 @@ function toRiskBucket(riskScore: number): RiskBucket {
 }
 
 function buildBaselineMonthlyHistory(seedIndex: number): WeeklyRiskSnapshot[] {
-  const weekRiskDrift = [-2, 0, 1, -1];
-  const weekMeetingDrift = [-0.5, 0, 0.5, 0];
+  const weekRiskDrift = [-2, 0, 1, -1, 2, -1, 0, 1];
+  const weekMeetingDrift = [-0.5, 0, 0.5, 0, 0.8, -0.3, 0.2, -0.5];
   const baseMeetingHours = 14 + (seedIndex % 6) * 1.6;
   const baseBackToBackDays = 1 + (seedIndex % 3);
   const baseAfterHoursMeetings = seedIndex % 4 === 0 ? 0 : 1;
@@ -227,6 +227,50 @@ const sustainedHighHistoryOverrides: Record<string, WeeklyRiskSnapshot[]> = {
       riskScore: 92,
       riskBucket: "High",
     },
+    {
+      weekLabel: "Week 5",
+      weeklyMeetingHours: 27,
+      meetingRatio: 0.7,
+      backToBackDays: 4,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 8.5,
+      selfAssessmentScore: 82,
+      riskScore: 87,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 6",
+      weeklyMeetingHours: 28.5,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 7.5,
+      selfAssessmentScore: 86,
+      riskScore: 90,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 7",
+      weeklyMeetingHours: 30,
+      meetingRatio: 0.8,
+      backToBackDays: 5,
+      afterHoursMeetings: 4,
+      estimatedFocusHours: 6,
+      selfAssessmentScore: 90,
+      riskScore: 93,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 8",
+      weeklyMeetingHours: 29.5,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 4,
+      estimatedFocusHours: 6.5,
+      selfAssessmentScore: 89,
+      riskScore: 94,
+      riskBucket: "High",
+    },
   ],
   "olivia-clark": [
     {
@@ -271,6 +315,50 @@ const sustainedHighHistoryOverrides: Record<string, WeeklyRiskSnapshot[]> = {
       estimatedFocusHours: 7.5,
       selfAssessmentScore: 87,
       riskScore: 91,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 5",
+      weeklyMeetingHours: 26.5,
+      meetingRatio: 0.7,
+      backToBackDays: 4,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 9,
+      selfAssessmentScore: 80,
+      riskScore: 85,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 6",
+      weeklyMeetingHours: 27,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 3,
+      estimatedFocusHours: 8,
+      selfAssessmentScore: 84,
+      riskScore: 89,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 7",
+      weeklyMeetingHours: 29,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 4,
+      estimatedFocusHours: 7,
+      selfAssessmentScore: 88,
+      riskScore: 92,
+      riskBucket: "High",
+    },
+    {
+      weekLabel: "Week 8",
+      weeklyMeetingHours: 28,
+      meetingRatio: 0.7,
+      backToBackDays: 5,
+      afterHoursMeetings: 4,
+      estimatedFocusHours: 7,
+      selfAssessmentScore: 86,
+      riskScore: 94,
       riskBucket: "High",
     },
   ],

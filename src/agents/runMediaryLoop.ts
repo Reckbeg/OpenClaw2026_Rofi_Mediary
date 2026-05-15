@@ -1,4 +1,7 @@
+import { runAnalystAgent } from "@/src/agents/analystAgent";
 import { runAnalyzerAgent } from "@/src/agents/analyzerAgent";
+import { runExecutorAgent } from "@/src/agents/executorAgent";
+import { runSupervisorAgent } from "@/src/agents/supervisorAgent";
 import { runWorkflowDiplomatAgent } from "@/src/agents/workflowDiplomatAgent";
 import { defaultEmployeeId, getScenarioWeeklyHistory, sampleOrgDataset } from "@/src/data/sampleOrg";
 import { calculateCalendarMetrics } from "@/src/modules/metrics/calendarMetrics";
@@ -665,126 +668,35 @@ function buildImpactSimulation({
 
 export function runOrgMediaryLoop(input: MediaryLoopInput = {}): MediaryLoopOutput {
   const scenario: DemoScenario = input.scenario ?? "baseline";
-  const employeeDetails: EmployeeLoopDetail[] = sampleOrgDataset.employees.map((employee, index) => {
-    const events = sampleOrgDataset.calendarsByEmployee[employee.id] ?? [];
-    const baselineAnswers = getAnswersForEmployee(index, input.selfAssessmentAnswers);
-    const answers = getScenarioAdjustedAnswers({
-      employeeId: employee.id,
-      baseAnswers: baselineAnswers,
-      scenario,
-    });
-    const baselineMetrics = calculateCalendarMetrics(events);
-    const metrics = getScenarioAdjustedMetrics({
-      employeeId: employee.id,
-      metrics: baselineMetrics,
-      scenario,
-    });
-    const selfAssessmentScore = calculateEnergyStrainScore(answers);
-    const scoring = computeRiskScore(metrics, selfAssessmentScore);
-    const weeklyHistory = getScenarioWeeklyHistory(employee.id, scenario);
-    const monthlyTrend = getMonthlyTrendSummary(employee.id, weeklyHistory);
-    const analyzer = runAnalyzerAgent(scoring, events);
-    const diplomat = runWorkflowDiplomatAgent(analyzer, scoring);
-    const sustainedHighByCurrentWeek = isSustainedHighSignal({
-      riskBucket: scoring.riskBucket,
-      calendarOverloadRisk: scoring.calendarOverloadRisk,
-      afterHoursMeetings: scoring.calendarMetrics.afterHoursMeetings,
-      backToBackDays: scoring.calendarMetrics.backToBackDays,
-      meetingRatio: scoring.calendarMetrics.meetingRatio,
-    });
-    const sustainedHigh = scoring.riskBucket === "High" && (
-      monthlyTrend.sustainedPatternDetected || sustainedHighByCurrentWeek
-    );
-    const route = resolveRoute(scoring.riskBucket, sustainedHigh);
 
-    return { employee, scoring, monthlyTrend, analyzer, diplomat, route };
-  });
+  // ── Agent 1: Analyst (pure reasoning, no side effects) ──
+  const analyst = runAnalystAgent(input);
+
+  // ── Agent 2: Executor (tool invocations, artifacts, follow-up tasks) ──
+  const executor = runExecutorAgent(analyst, scenario);
+
+  // ── Agent 3: Supervisor (anomaly detection, org health, execution trace) ──
+  const supervisor = runSupervisorAgent(analyst, executor, scenario);
 
   const selectedEmployeeDetail =
-    employeeDetails.find((detail) => detail.employee.id === defaultEmployeeId) ?? employeeDetails[0];
-
-  const lowRiskCount = employeeDetails.filter((detail) => detail.scoring.riskBucket === "Low").length;
-  const mediumRiskCount = employeeDetails.filter((detail) => detail.scoring.riskBucket === "Medium").length;
-  const highRiskCount = employeeDetails.filter((detail) => detail.scoring.riskBucket === "High").length;
-  const sustainedHighCount = employeeDetails.filter(
-    (detail) => detail.route === "Sustained High: HR Ops queue",
-  ).length;
-  const routeCounts = {
-    hrOps: employeeDetails.filter((detail) => detail.route === "Sustained High: HR Ops queue").length,
-    managerBrief: employeeDetails.filter(
-      (detail) =>
-        detail.route === "High: employee nudge + manager brief" ||
-        detail.route === "Sustained High: HR Ops queue",
-    ).length,
-    employeeNudges: employeeDetails.filter((detail) => detail.route === "Medium: employee nudge").length,
-    monitorOnly: employeeDetails.filter((detail) => detail.route === "Low: no action or monitor").length,
-  };
-
-  const orgSummary: MediaryLoopOutput["orgSummary"] = {
-    totalEmployees: employeeDetails.length,
-    lowRiskCount,
-    mediumRiskCount,
-    highRiskCount,
-    sustainedHighCount,
-    avgRiskScore: Math.round(
-      employeeDetails.reduce((sum, detail) => sum + detail.scoring.overallRiskScore, 0) /
-        employeeDetails.length,
-    ),
-  };
-  const monthlyTrendByEmployee: MediaryLoopOutput["monthlyTrendByEmployee"] = Object.fromEntries(
-    employeeDetails.map((detail) => [detail.employee.id, detail.monthlyTrend]),
-  );
-  const monthlyTrendOrgSummary: MediaryLoopOutput["monthlyTrendOrgSummary"] = {
-    worseningCount: employeeDetails.filter((detail) => detail.monthlyTrend.trendDirection === "worsening")
-      .length,
-    improvingCount: employeeDetails.filter((detail) => detail.monthlyTrend.trendDirection === "improving")
-      .length,
-    sustainedPatternCount: employeeDetails.filter((detail) => detail.monthlyTrend.sustainedPatternDetected)
-      .length,
-  };
-
-  const teamHeatmap = toHeatmap(employeeDetails);
-  const interventionQueue = employeeDetails
-    .filter((detail) => detail.route !== "Low: no action or monitor")
-    .map(toQueueItem)
-    .sort((a, b) => b.riskScore - a.riskScore);
-  const toolInvocations = buildToolInvocations(interventionQueue);
-  const actionArtifacts = buildActionArtifacts(interventionQueue);
-  const followUpTasks = buildFollowUpTasks(interventionQueue);
-  const runLedger = buildRunLedger({
-    scenario,
-    employeeDetails,
-    queue: interventionQueue,
-    toolInvocations,
-    actionArtifacts,
-    followUpTasks,
-  });
-  const impactSimulation = buildImpactSimulation({
-    summary: orgSummary,
-    queue: interventionQueue,
-  });
+    analyst.employeeDetails.find((detail) => detail.employee.id === defaultEmployeeId) ?? analyst.employeeDetails[0];
 
   return {
     scenario,
-    orgSummary,
-    monthlyTrendOrgSummary,
-    monthlyTrendByEmployee,
-    teamHeatmap,
-    interventionQueue,
-    hrMemo: buildHrMemo(orgSummary, interventionQueue, monthlyTrendOrgSummary),
-    impactSimulation,
+    orgSummary: analyst.orgSummary,
+    monthlyTrendOrgSummary: analyst.monthlyTrendOrgSummary,
+    monthlyTrendByEmployee: analyst.monthlyTrendByEmployee,
+    teamHeatmap: analyst.teamHeatmap,
+    interventionQueue: analyst.interventionQueue,
+    hrMemo: analyst.hrMemo,
+    impactSimulation: analyst.impactSimulation,
     selectedEmployeeDetail,
-    toolInvocations,
-    actionArtifacts,
-    followUpTasks,
-    runLedger,
-    executionTrace: buildExecutionTrace({
-      scenario,
-      totalEmployees: employeeDetails.length,
-      teamCount: teamHeatmap.length,
-      queueCount: interventionQueue.length,
-      routeCounts,
-    }),
+    toolInvocations: executor.toolInvocations,
+    actionArtifacts: executor.actionArtifacts,
+    followUpTasks: executor.followUpTasks,
+    runLedger: executor.runLedger,
+    orgHealth: supervisor.orgHealth,
+    executionTrace: supervisor.executionTrace,
     workflowStatus: "Autonomous org-wide workload diplomacy loop completed",
   };
 }

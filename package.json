@@ -9,6 +9,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "agent": "tsx scripts/run-agent.ts",
+    "loop": "tsx scripts/run-loop.ts",
     "test": "vitest run"
   },
   "keywords": [],
