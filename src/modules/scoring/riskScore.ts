@@ -4,7 +4,7 @@ function clamp(value: number): number {
   return Math.min(100, Math.max(0, value));
 }
 
-function getRiskBucket(score: number): RiskBucket {
+export function getRiskBucket(score: number): RiskBucket {
   if (score >= 80) return "High";
   if (score >= 40) return "Medium";
   return "Low";
