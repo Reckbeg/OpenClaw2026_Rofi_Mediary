@@ -65,6 +65,20 @@ Key components:
 - **Analyzer Agent**: identifies top workload strain drivers and candidate actions.
 - **Workflow Diplomat Agent**: generates interventions, stakeholder messages, and follow-up-oriented week previews.
 
+## Hermes Runtime Role
+
+Mediary's core workload diplomacy loop is implemented in deterministic TypeScript modules for hackathon reliability and judge reproducibility. Hermes is used as the runtime orchestration layer to execute, validate, and stress-test the agent loop.
+
+In the demo setup, Hermes runs Mediary with MiMo V2.5 Pro for execution review and multi-agent evaluation. The Hermes evaluation checks whether Mediary demonstrates:
+- signal observation,
+- risk reasoning,
+- intervention routing,
+- stakeholder message execution,
+- follow-up planning, and
+- scenario-sensitive behavior.
+
+The deterministic in-repo loop remains the source of truth for scoring, routing, and output contracts.
+
 ## 8) Core Features
 
 1. Org-wide autonomous agent loop  
@@ -106,11 +120,15 @@ Key components:
 - TypeScript
 - Tailwind CSS
 - Deterministic in-repo data + scoring modules
+- Hermes as orchestration/runtime layer
+- MiMo V2.5 Pro as the reasoning model used through Hermes for execution review and multi-agent evaluation
 
 ## 11) How To Run Locally
 
 ```bash
 npm install
+npm run typecheck
+npm run build
 npm run dev
 ```
 
