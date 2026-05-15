@@ -165,16 +165,18 @@ export default function Home() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">
-              OpenClaw Agenthon 2026
+              OPENCLAW AGENTHON 2026
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
-              Mediary Agent Command Center
+              Mediary AI Workplace Diplomat
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-stone-600">
-              A stateful 3-agent workload diplomacy loop for org-wide workload strain routing.
+              Mediary detects invisible overload patterns before they turn into burnout, then routes the right
+              workload intervention to the right team.
             </p>
             <p className="mt-3 text-sm text-stone-500">
-              Operational workload assistant, not a medical diagnosis tool.
+              Built for HR and people teams to spot workload strain early, explain the risk, and coordinate practical
+              next steps.
             </p>
           </div>
           <div className="flex w-full flex-col gap-3 lg:w-auto">
@@ -184,7 +186,7 @@ export default function Home() {
               disabled={isBusy}
               className="rounded-2xl bg-stone-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:bg-stone-400"
             >
-              Run sustained-high agent cycle
+              Simulate high overload
             </button>
             <button
               type="button"
@@ -192,7 +194,7 @@ export default function Home() {
               disabled={isBusy}
               className="rounded-2xl border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-700 transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:text-stone-400"
             >
-              Run baseline cycle
+              Simulate normal workload
             </button>
           </div>
         </div>
