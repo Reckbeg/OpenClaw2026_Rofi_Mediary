@@ -53,6 +53,8 @@ npm run agent                              # Single baseline run
 npm run agent -- --scenario=sustained-high # Single sustained-high run
 npm run loop                               # Multi-phase loop runner
 npm run loop -- --scenario=sustained-high  # Sustained-high loop run
+npm run multicycle -- --cycles=8           # 8-cycle demo with org drift
+npm run ack -- follow-up-3 --outcome='reduced meetings by 3h'  # Acknowledge follow-up
 npm run dev
 npm run typecheck
 npm run build
@@ -73,9 +75,13 @@ Detailed architecture: `docs/architecture.md`
 - Risk routing and HR Ops escalation
 - Internal tool execution adapters
 - Action artifact generation
-- Follow-up task queue
+- Follow-up task queue with ack-based feedback loop
 - Run ledger and local memory
 - SSE web streaming for live agent run visualization
+- Dynamic org data generator with week-over-week drift
+- Deliverable file writer (real .md artifacts to ~/.hermes/deliverables/)
+- Multi-cycle demo runner with cross-cycle follow-up consumption
+- Scheduled automation via cron (Mondays 9am)
 
 Mediary supports a stateful autonomous agent loop with local memory and cross-run continuity during repeated runs.
 
