@@ -6,6 +6,7 @@ export type {
   CalendarEvent as CalendarMeeting,
   CalendarMetrics,
   CleanedDayPreview,
+  DemoScenario,
   Employee,
   ExecutionTraceStep,
   Intervention,

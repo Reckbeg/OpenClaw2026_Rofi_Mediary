@@ -5,6 +5,8 @@ import type { AnalyzeResponse, RiskBucket } from "@/lib/types";
 type ResultDashboardProps = {
   result: AnalyzeResponse | null;
   isLoading: boolean;
+  loadingMessage: string;
+  lastScenario: AnalyzeResponse["scenario"] | null;
 };
 
 const riskStyles: Record<RiskBucket, string> = {
@@ -18,63 +20,248 @@ function toManagerAction(nextStep: string): string {
   return `Manager action: ${firstSentence.replace(/\.$/, "")}.`;
 }
 
-export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
+function healthTone(status: AnalyzeResponse["orgHealth"]["status"]): string {
+  if (status === "healthy") return "text-emerald-700";
+  if (status === "attention") return "text-amber-700";
+  return "text-rose-700";
+}
+
+export function ResultDashboard({ result, isLoading, loadingMessage, lastScenario }: ResultDashboardProps) {
+  if (isLoading) {
+    return (
+      <section className="rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Autonomous run output</p>
+        <h2 className="mt-2 text-2xl font-semibold text-stone-950">Agent operations console</h2>
+        <div className="mt-4 rounded-2xl border border-stone-100 bg-stone-50 p-5 text-sm text-stone-600">
+          {loadingMessage}
+        </div>
+      </section>
+    );
+  }
+
+  if (!result) {
+    return (
+      <section className="rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Autonomous run output</p>
+        <h2 className="mt-2 text-2xl font-semibold text-stone-950">Agent operations console</h2>
+        <p className="mt-2 text-sm leading-6 text-stone-600">
+          Start a cycle to run the Analyst → Executor → Supervisor loop and generate workload strain routes,
+          action artifacts, and a follow-up queue.
+          {lastScenario ? ` Last requested scenario: ${lastScenario}.` : ""}
+        </p>
+        <div className="mt-4 rounded-2xl border border-dashed border-stone-300 bg-stone-50/80 p-6 text-sm leading-6 text-stone-600">
+          Run a cycle to view operator dispatch summary, 3-agent pipeline results, priority decisions, execution
+          layer outputs, supervisor review, impact simulation, and execution trace.
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-sm">
       <div className="mb-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Agent output</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Autonomous run output</p>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <h2 className="text-2xl font-semibold text-stone-950">Workflow diplomacy</h2>
-          {result && (
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-emerald-800">
-              {result.workflowStatus}
-            </span>
-          )}
+          <h2 className="text-2xl font-semibold text-stone-950">Agent operations console</h2>
+          <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-emerald-800">
+            {result.workflowStatus}
+          </span>
         </div>
         <p className="mt-2 text-sm leading-6 text-stone-600">
-          Deterministic analyzer and diplomat agents produce operational, non-clinical interventions.
-          {result ? ` Scenario: ${result.scenario}.` : ""}
+          Scenario completed: {result.scenario}. This run captures workload strain routing, execution artifacts,
+          and supervisor checks for the org-wide cycle.
         </p>
       </div>
 
-      {isLoading && (
-        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-5 text-sm text-stone-600">
-          Loading calendar metrics, scoring self-assessment, and drafting diplomatic workflow actions.
-        </div>
-      )}
-
-      {!isLoading && !result && (
-        <div className="rounded-2xl border border-dashed border-stone-300 bg-stone-50/80 p-6 text-sm leading-6 text-stone-600">
-          Run the analysis to see overload risk, top drivers, three interventions, a diplomatic message draft,
-          and a cleaned-up week preview.
-        </div>
-      )}
-
-      {!isLoading && result && (
-        <div className="space-y-6">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-            <h3 className="font-semibold text-emerald-900">Org summary</h3>
-            <p className="mt-1 text-sm text-emerald-900/90">
-              {result.orgSummary.totalEmployees} employees analyzed · avg risk {result.orgSummary.avgRiskScore}
+      <div className="space-y-6">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <h3 className="font-semibold text-emerald-900">Operator Dispatch Summary</h3>
+          <div className="mt-3 grid gap-2 text-sm text-emerald-900/90 md:grid-cols-2">
+            <p>Workflow status: {result.workflowStatus}</p>
+            <p>Scenario: {result.scenario}</p>
+            <p className={healthTone(result.orgHealth.status)}>
+              Org health: {result.orgHealth.status} ({result.orgHealth.score}/100)
             </p>
-            <p className="mt-2 text-sm text-emerald-900/90">
-              Low {result.orgSummary.lowRiskCount} · Medium {result.orgSummary.mediumRiskCount} · High {result.orgSummary.highRiskCount} · Sustained High {result.orgSummary.sustainedHighCount}
-            </p>
-            <p className="mt-2 text-sm text-emerald-900/90">
-              4-week trend: worsening {result.monthlyTrendOrgSummary.worseningCount} · improving{" "}
-              {result.monthlyTrendOrgSummary.improvingCount} · sustained pattern{" "}
-              {result.monthlyTrendOrgSummary.sustainedPatternCount}
+            <p>Run ID: {result.runLedger.runId}</p>
+            <p>Employees analyzed: {result.runLedger.employeesAnalyzed}</p>
+            <p>Decisions made: {result.runLedger.decisionsMade}</p>
+            <p>Tools executed: {result.runLedger.toolsExecuted}</p>
+            <p>Artifacts created: {result.runLedger.actionArtifactsCreated}</p>
+            <p>Follow-ups queued: {result.runLedger.followUpsQueued}</p>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+          <h3 className="font-semibold text-stone-950">3-Agent Pipeline Results</h3>
+          <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            <div className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
+              <p className="font-semibold text-stone-900">Aria Analyst</p>
+              <p className="mt-2">
+                Org summary: {result.orgSummary.lowRiskCount} low · {result.orgSummary.mediumRiskCount} medium ·{" "}
+                {result.orgSummary.highRiskCount} high.
+              </p>
+              <p className="mt-1">
+                Trend summary: {result.monthlyTrendOrgSummary.worseningCount} worsening ·{" "}
+                {result.monthlyTrendOrgSummary.sustainedPatternCount} sustained-high workload pattern.
+              </p>
+              <p className="mt-1">HR Ops routes: {result.orgSummary.sustainedHighCount}</p>
+            </div>
+            <div className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
+              <p className="font-semibold text-stone-900">Ethan Executor</p>
+              <p className="mt-2">Tool invocations: {result.toolInvocations.length}</p>
+              <p className="mt-1">Action artifacts: {result.actionArtifacts.length}</p>
+              <p className="mt-1">Follow-up queue: {result.followUpTasks.length}</p>
+            </div>
+            <div className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
+              <p className="font-semibold text-stone-900">Sol Supervisor</p>
+              <p className="mt-2">
+                Org health: {result.orgHealth.status} ({result.orgHealth.score}/100)
+              </p>
+              <p className="mt-1">Anomalies: {result.orgHealth.anomalies.length}</p>
+              <p className="mt-1">Recommendation: {result.orgHealth.recommendation}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+          <h3 className="font-semibold text-stone-950">Priority Decisions</h3>
+          <div className="mt-3 space-y-2">
+            {result.interventionQueue.slice(0, 3).map((item) => (
+              <div key={item.employeeId} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                <p>
+                  {item.employeeName} · {item.route}
+                </p>
+                <p className="mt-1 text-xs text-stone-600">Decision rationale: {item.decisionRationale}</p>
+                <p className="mt-1 text-xs text-stone-600">
+                  Considered alternatives: {item.consideredAlternatives.join(" · ")}
+                </p>
+                <p className="mt-1 text-xs text-stone-600">Action artifact: {item.actionArtifact}</p>
+                <p className="mt-1 text-xs text-stone-600">Follow-up cadence: {item.followUpCadence}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+          <h3 className="font-semibold text-stone-950">Execution Layer</h3>
+          <div className="mt-4 space-y-4">
+            <div>
+              <p className="text-sm font-semibold text-stone-900">Tool execution log</p>
+              <div className="mt-2 space-y-2">
+                {result.toolInvocations.slice(0, 6).map((toolRun) => (
+                  <div key={toolRun.id} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                    <p>
+                      {toolRun.tool} · {toolRun.targetEmployeeName} · {toolRun.status}
+                    </p>
+                    <p className="mt-1 text-xs text-stone-600">{toolRun.summary}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-stone-900">Action artifacts</p>
+              <div className="mt-2 space-y-2">
+                {result.actionArtifacts.slice(0, 6).map((artifact) => (
+                  <div key={artifact.id} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                    <p>
+                      {artifact.type} · {artifact.owner} · {artifact.employeeName}
+                    </p>
+                    <p className="mt-1 text-xs text-stone-600">{artifact.title}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-stone-900">Follow-up task queue</p>
+              <div className="mt-2 space-y-2">
+                {result.followUpTasks.slice(0, 6).map((task) => (
+                  <div key={task.id} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                    <p>
+                      {task.employeeName} · {task.owner} · {task.dueIn} · {task.status}
+                    </p>
+                    <p className="mt-1 text-xs text-stone-600">{task.task}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+          <h3 className="font-semibold text-stone-950">Supervisor Review</h3>
+          <p className={`mt-2 text-sm font-semibold ${healthTone(result.orgHealth.status)}`}>
+            Org health: {result.orgHealth.status} ({result.orgHealth.score}/100)
+          </p>
+          <div className="mt-3 space-y-2">
+            {result.orgHealth.anomalies.length === 0 && (
+              <p className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600">
+                No anomalies detected in this run.
+              </p>
+            )}
+            {result.orgHealth.anomalies.map((anomaly) => (
+              <div key={anomaly.code} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                <p>
+                  {anomaly.code} · {anomaly.severity}
+                </p>
+                <p className="mt-1 text-xs text-stone-600">{anomaly.message}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-sm text-stone-700">Recommendation: {result.orgHealth.recommendation}</p>
+        </div>
+
+        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+          <h3 className="font-semibold text-stone-950">Impact Simulation</h3>
+          <p className="mt-2 text-sm text-stone-700">
+            Avg risk: {result.impactSimulation.before.avgRiskScore} → {result.impactSimulation.after.projectedAvgRiskScore}
+          </p>
+          <p className="mt-1 text-sm text-stone-700">
+            Projected meeting hours reduced: {result.impactSimulation.projectedMeetingHoursReduced}h
+          </p>
+          <p className="mt-1 text-sm text-stone-700">
+            Projected focus hours gained: {result.impactSimulation.projectedFocusHoursGained}h
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+          <h3 className="font-semibold text-stone-950">Execution Trace</h3>
+          <div className="mt-3 space-y-2">
+            {result.executionTrace.map((step) => (
+              <div key={`${step.step}-${step.name}`} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                <p>
+                  {step.phase} · {step.name} · {step.status}
+                </p>
+                <p className="mt-1 text-xs text-stone-600">{step.output}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+          <h3 className="font-semibold text-stone-950">Supporting Detail</h3>
+          <div className="mt-4 rounded-2xl bg-stone-950 p-5 text-white">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm text-stone-300">{result.selectedEmployeeDetail.employee.name} workload strain score</p>
+                <p className="mt-2 text-5xl font-semibold">{result.selectedEmployeeDetail.scoring.overallRiskScore}</p>
+              </div>
+              <span className={`rounded-full px-3 py-1 text-sm font-semibold ${riskStyles[result.selectedEmployeeDetail.scoring.riskBucket]}`}>
+                {result.selectedEmployeeDetail.scoring.riskBucket}
+              </span>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-stone-300">{result.selectedEmployeeDetail.analyzer.summary}</p>
+          </div>
+
+          <div className="mt-4">
+            <p className="text-sm font-semibold text-stone-900">HR memo</p>
+            <p className="mt-2 rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+              {result.hrMemo}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">HR memo</h3>
-            <p className="mt-2 text-sm leading-6 text-stone-700">{result.hrMemo}</p>
-          </div>
-
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Team heatmap</h3>
-            <div className="mt-3 space-y-2">
+          <div className="mt-4">
+            <p className="text-sm font-semibold text-stone-900">Team heatmap</p>
+            <div className="mt-2 space-y-2">
               {result.teamHeatmap.slice(0, 6).map((teamItem) => (
                 <div key={teamItem.team} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
                   {teamItem.team}: {teamItem.avgRiskScore}/100 ({teamItem.riskBucket}) · {teamItem.employeeCount} members · {teamItem.highRiskMembers} high-risk
@@ -83,123 +270,14 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Intervention queue</h3>
-            <div className="mt-3 space-y-2">
-              {result.interventionQueue.length === 0 && (
-                <div className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600">
-                  No queued interventions. Org remains in monitor state.
-                </div>
-              )}
-              {result.interventionQueue.slice(0, 5).map((item) => (
-                <div key={item.employeeId} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
-                  {item.employeeName} ({item.team}) · {item.riskScore}/100 {item.riskBucket} · {item.route}
-                  {typeof item.previousWeekRiskScore === "number" && item.previousWeekRiskBucket && (
-                    <p className="mt-1 text-xs text-stone-600">
-                      Previous week: {item.previousWeekRiskScore}/100 {item.previousWeekRiskBucket}
-                    </p>
-                  )}
-                  <p className="mt-1 text-xs text-stone-600">Next step: {item.nextStep}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Agent decision log</h3>
-            <div className="mt-3 space-y-2">
-              {result.interventionQueue.length === 0 && (
-                <div className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600">
-                  No decision packets generated because the org is in monitor state.
-                </div>
-              )}
-              {result.interventionQueue.slice(0, 3).map((item) => (
-                <div
-                  key={`decision-log-${item.employeeId}`}
-                  className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
-                >
-                  <p>
-                    Decision: {item.employeeName} ({item.team}) → {item.route}
-                  </p>
-                  <p className="mt-1 text-xs text-stone-600">Why this route: {item.decisionRationale}</p>
-                  <p className="mt-1 text-xs text-stone-600">
-                    Alternatives considered: {item.consideredAlternatives.join(" · ")}
-                  </p>
-                  <p className="mt-1 text-xs text-stone-600">Action artifact prepared: {item.actionArtifact}</p>
-                  <p className="mt-1 text-xs text-stone-600">Follow-up cadence: {item.followUpCadence}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Tool execution log</h3>
-            <div className="mt-3 space-y-2">
-              {result.toolInvocations.slice(0, 6).map((toolRun) => (
-                <div
-                  key={toolRun.id}
-                  className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
-                >
-                  <p>
-                    {toolRun.tool} · {toolRun.targetEmployeeName} · {toolRun.status}
-                  </p>
-                  <p className="mt-1 text-xs text-stone-600">{toolRun.summary}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Action artifacts</h3>
-            <div className="mt-3 space-y-2">
-              {result.actionArtifacts.slice(0, 4).map((artifact) => (
-                <div
-                  key={artifact.id}
-                  className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
-                >
-                  <p>
-                    {artifact.type} · {artifact.owner} · {artifact.employeeName}
-                  </p>
-                  <p className="mt-1 text-xs text-stone-600">{artifact.title}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Follow-up task queue</h3>
-            <div className="mt-3 space-y-2">
-              {result.followUpTasks.slice(0, 5).map((task) => (
-                <div key={task.id} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
-                  <p>
-                    {task.employeeName} · {task.owner} · {task.dueIn} · {task.status}
-                  </p>
-                  <p className="mt-1 text-xs text-stone-600">{task.task}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Run ledger</h3>
-            <div className="mt-2 grid gap-2 text-sm text-stone-700 md:grid-cols-2">
-              <p>Run ID: {result.runLedger.runId}</p>
-              <p>Employees analyzed: {result.runLedger.employeesAnalyzed}</p>
-              <p>Decisions made: {result.runLedger.decisionsMade}</p>
-              <p>Tools executed: {result.runLedger.toolsExecuted}</p>
-              <p>Action artifacts created: {result.runLedger.actionArtifactsCreated}</p>
-              <p>Follow-ups queued: {result.runLedger.followUpsQueued}</p>
-            </div>
-          </div>
-
           {result.interventionQueue.some(
             (item) =>
               item.route === "High: employee nudge + manager brief" ||
               item.route === "Sustained High: HR Ops queue",
           ) && (
-            <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-              <h3 className="font-semibold text-stone-950">Manager coaching brief</h3>
-              <div className="mt-3 space-y-2">
+            <div className="mt-4">
+              <p className="text-sm font-semibold text-stone-900">Manager coaching brief</p>
+              <div className="mt-2 space-y-2">
                 {result.interventionQueue
                   .filter(
                     (item) =>
@@ -223,54 +301,18 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </div>
           )}
 
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Impact simulation</h3>
-            <p className="mt-2 text-sm text-stone-700">
-              Avg risk {result.impactSimulation.before.avgRiskScore} → {result.impactSimulation.after.projectedAvgRiskScore}
-              {" · "}High-risk {result.impactSimulation.before.highRiskCount} → {result.impactSimulation.after.projectedHighRiskCount}
-              {" · "}Sustained-high {result.impactSimulation.before.sustainedHighCount} → {result.impactSimulation.after.projectedSustainedHighCount}
-            </p>
-            <p className="mt-1 text-sm text-stone-700">
-              Queue {result.impactSimulation.before.interventionQueueCount} → {result.impactSimulation.after.projectedInterventionQueueCount}
-            </p>
-            <p className="mt-1 text-sm text-stone-700">
-              Projected meeting hours reduced: {result.impactSimulation.projectedMeetingHoursReduced}h
-            </p>
-            <p className="mt-1 text-sm text-stone-700">
-              Projected focus hours gained: {result.impactSimulation.projectedFocusHoursGained}h
-            </p>
-            <div className="mt-3 space-y-1">
-              {result.impactSimulation.assumptions.map((assumption) => (
-                <p key={assumption} className="text-xs text-stone-600">
-                  - {assumption}
-                </p>
-              ))}
-            </div>
+          <div className="mt-4">
+            <MetricsCards scoring={result.selectedEmployeeDetail.scoring} />
           </div>
 
-          <div className="rounded-2xl bg-stone-950 p-5 text-white">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm text-stone-300">{result.selectedEmployeeDetail.employee.name} overload risk score</p>
-                <p className="mt-2 text-5xl font-semibold">{result.selectedEmployeeDetail.scoring.overallRiskScore}</p>
-              </div>
-              <span className={`rounded-full px-3 py-1 text-sm font-semibold ${riskStyles[result.selectedEmployeeDetail.scoring.riskBucket]}`}>
-                {result.selectedEmployeeDetail.scoring.riskBucket}
-              </span>
-            </div>
-            <p className="mt-4 text-sm leading-6 text-stone-300">{result.selectedEmployeeDetail.analyzer.summary}</p>
-          </div>
-
-          <MetricsCards scoring={result.selectedEmployeeDetail.scoring} />
-
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">4-week trend signal</h3>
+          <div className="mt-4 rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h4 className="font-semibold text-stone-950">8-week trend signal</h4>
             <div className="mt-2 grid gap-2 text-sm text-stone-700 md:grid-cols-2">
               <p>Trend direction: {result.selectedEmployeeDetail.monthlyTrend.trendDirection}</p>
               <p>High-risk weeks: {result.selectedEmployeeDetail.monthlyTrend.highRiskWeeks}</p>
               <p>Risk delta: {result.selectedEmployeeDetail.monthlyTrend.riskDelta}</p>
               <p>
-                Sustained pattern detected:{" "}
+                Sustained-high workload pattern:{" "}
                 {result.selectedEmployeeDetail.monthlyTrend.sustainedPatternDetected ? "Yes" : "No"}
               </p>
             </div>
@@ -279,41 +321,8 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Agent execution trace</h3>
-            <p className="mt-1 text-sm text-stone-600">
-              Deterministic step-by-step execution showing how Mediary observes, reasons, decides, and executes.
-            </p>
-            <div className="mt-4 space-y-3">
-              {result.executionTrace.map((step, index) => (
-                <div key={`${step.step}-${step.name}`} className="relative rounded-xl border border-stone-200 bg-white p-4">
-                  {index !== result.executionTrace.length - 1 && (
-                    <span className="absolute left-[1.1rem] top-11 h-[calc(100%-2.25rem)] w-px bg-stone-200" aria-hidden />
-                  )}
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-semibold text-white">
-                      {step.step}
-                    </span>
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <p className="font-semibold text-stone-900">{step.name}</p>
-                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-emerald-800">
-                          {step.status}
-                        </span>
-                        <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-blue-800">
-                          {step.phase}
-                        </span>
-                      </div>
-                      <p className="mt-2 text-sm leading-6 text-stone-700">{step.output}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">Top drivers</h3>
+          <div className="mt-4">
+            <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">Top drivers</h4>
             <div className="mt-3 space-y-2">
               {result.selectedEmployeeDetail.scoring.topDrivers.map((driver) => (
                 <div key={driver} className="rounded-xl border border-stone-100 bg-stone-50 px-3 py-2 text-sm text-stone-700">
@@ -323,10 +332,10 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">
+          <div className="mt-4">
+            <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">
               Three concrete interventions
-            </h3>
+            </h4>
             <div className="mt-3 space-y-3">
               {result.selectedEmployeeDetail.diplomat.interventions.map((intervention, index) => (
                 <RecommendationCard key={intervention.title} intervention={intervention} index={index} />
@@ -334,15 +343,15 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
-            <h3 className="font-semibold text-stone-950">Diplomatic message draft</h3>
+          <div className="mt-4 rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h4 className="font-semibold text-stone-950">Diplomatic message draft</h4>
             <p className="mt-3 text-sm leading-6 text-stone-700">{result.selectedEmployeeDetail.diplomat.diplomaticMessageDraft}</p>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">
+          <div className="mt-4">
+            <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">
               Cleaned-up week preview
-            </h3>
+            </h4>
             <div className="mt-3 space-y-3">
               {result.selectedEmployeeDetail.diplomat.cleanedWeekPreview.map((day) => (
                 <div key={day.day} className="rounded-2xl border border-stone-100 bg-white p-4 shadow-sm">
@@ -364,7 +373,7 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }

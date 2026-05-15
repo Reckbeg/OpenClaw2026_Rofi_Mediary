@@ -4,8 +4,9 @@ import type { SelfAssessmentAnswer } from "@/lib/types";
 type SelfAssessmentPanelProps = {
   answers: SelfAssessmentAnswer[];
   onAnswerChange: (questionId: string, score: number) => void;
-  onAnalyze: () => void;
+  onAnalyze?: () => void;
   isLoading: boolean;
+  showAnalyzeButton?: boolean;
 };
 
 const scaleLabels = ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"];
@@ -15,6 +16,7 @@ export function SelfAssessmentPanel({
   onAnswerChange,
   onAnalyze,
   isLoading,
+  showAnalyzeButton = true,
 }: SelfAssessmentPanelProps) {
   const scoreByQuestion = new Map(answers.map((answer) => [answer.questionId, answer.score]));
 
@@ -63,14 +65,16 @@ export function SelfAssessmentPanel({
         ))}
       </div>
 
-      <button
-        type="button"
-        onClick={onAnalyze}
-        disabled={isLoading}
-        className="mt-6 w-full rounded-2xl bg-stone-950 px-5 py-4 text-sm font-semibold text-white shadow-sm transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:bg-stone-400"
-      >
-        {isLoading ? "Analyzing workload..." : "Analyze workload"}
-      </button>
+      {showAnalyzeButton && onAnalyze && (
+        <button
+          type="button"
+          onClick={onAnalyze}
+          disabled={isLoading}
+          className="mt-6 w-full rounded-2xl bg-stone-950 px-5 py-4 text-sm font-semibold text-white shadow-sm transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:bg-stone-400"
+        >
+          {isLoading ? "Analyzing workload..." : "Analyze workload"}
+        </button>
+      )}
     </section>
   );
 }
