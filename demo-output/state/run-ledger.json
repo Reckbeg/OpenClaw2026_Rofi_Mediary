@@ -1,0 +1,11 @@
+{
+  "runId": "run-sustained-high-24-15",
+  "scenario": "sustained-high",
+  "startedAt": "2026-05-15T13:51:01.285Z",
+  "completedAt": "2026-05-15T13:51:01.285Z",
+  "employeesAnalyzed": 24,
+  "decisionsMade": 15,
+  "toolsExecuted": 21,
+  "actionArtifactsCreated": 19,
+  "followUpsQueued": 15
+}

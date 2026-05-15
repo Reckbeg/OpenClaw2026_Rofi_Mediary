@@ -1,0 +1,1325 @@
+{
+  "scenario": "sustained-high",
+  "orgSummary": {
+    "totalEmployees": 24,
+    "lowRiskCount": 9,
+    "mediumRiskCount": 13,
+    "highRiskCount": 2,
+    "sustainedHighCount": 2,
+    "avgRiskScore": 44
+  },
+  "monthlyTrendOrgSummary": {
+    "worseningCount": 2,
+    "improvingCount": 0,
+    "sustainedPatternCount": 2
+  },
+  "monthlyTrendByEmployee": {
+    "maya-chen": {
+      "employeeId": "maya-chen",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "alex-johnson": {
+      "employeeId": "alex-johnson",
+      "trendDirection": "worsening",
+      "highRiskWeeks": 7,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 15,
+      "sustainedPatternDetected": true,
+      "summary": "Sustained overload: 7 high-risk weeks, trend worsening by 15 points."
+    },
+    "samira-khan": {
+      "employeeId": "samira-khan",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "noah-lee": {
+      "employeeId": "noah-lee",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "priya-nair": {
+      "employeeId": "priya-nair",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "diego-santos": {
+      "employeeId": "diego-santos",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "hana-kim": {
+      "employeeId": "hana-kim",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "liam-owens": {
+      "employeeId": "liam-owens",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "amina-yusuf": {
+      "employeeId": "amina-yusuf",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "ben-turner": {
+      "employeeId": "ben-turner",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "charlotte-rivera": {
+      "employeeId": "charlotte-rivera",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "daniel-wu": {
+      "employeeId": "daniel-wu",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "ella-foster": {
+      "employeeId": "ella-foster",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "farid-hassan": {
+      "employeeId": "farid-hassan",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "grace-mills": {
+      "employeeId": "grace-mills",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "haruto-sato": {
+      "employeeId": "haruto-sato",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "isabella-rossi": {
+      "employeeId": "isabella-rossi",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "jacob-nguyen": {
+      "employeeId": "jacob-nguyen",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "karina-silva": {
+      "employeeId": "karina-silva",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "leo-brooks": {
+      "employeeId": "leo-brooks",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "marta-nowak": {
+      "employeeId": "marta-nowak",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "niko-petrov": {
+      "employeeId": "niko-petrov",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "olivia-clark": {
+      "employeeId": "olivia-clark",
+      "trendDirection": "worsening",
+      "highRiskWeeks": 7,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 16,
+      "sustainedPatternDetected": true,
+      "summary": "Sustained overload: 7 high-risk weeks, trend worsening by 16 points."
+    },
+    "paul-lam": {
+      "employeeId": "paul-lam",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 8,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    }
+  },
+  "teamHeatmap": [
+    {
+      "team": "Customer Operations",
+      "avgRiskScore": 51,
+      "riskBucket": "Medium",
+      "employeeCount": 5,
+      "highRiskMembers": 1
+    },
+    {
+      "team": "Business Operations",
+      "avgRiskScore": 46,
+      "riskBucket": "Medium",
+      "employeeCount": 3,
+      "highRiskMembers": 0
+    },
+    {
+      "team": "Product & Engineering",
+      "avgRiskScore": 44,
+      "riskBucket": "Medium",
+      "employeeCount": 8,
+      "highRiskMembers": 1
+    },
+    {
+      "team": "People & Program Operations",
+      "avgRiskScore": 41,
+      "riskBucket": "Medium",
+      "employeeCount": 4,
+      "highRiskMembers": 0
+    },
+    {
+      "team": "Design & Quality",
+      "avgRiskScore": 38,
+      "riskBucket": "Low",
+      "employeeCount": 4,
+      "highRiskMembers": 0
+    }
+  ],
+  "interventionQueue": [
+    {
+      "employeeId": "alex-johnson",
+      "employeeName": "Alex Johnson",
+      "team": "Product & Engineering",
+      "riskScore": 94,
+      "riskBucket": "High",
+      "previousWeekRiskScore": 89,
+      "previousWeekRiskBucket": "High",
+      "route": "Sustained High: HR Ops queue",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Escalate to HR Ops case handling with manager brief in this cycle.",
+      "decisionRationale": "Current risk is 94/100 High, previous week context is 89/100, and the 8-week trend is worsening with sustained overload signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "Medium: employee nudge",
+        "High: employee nudge + manager brief"
+      ],
+      "actionArtifact": "HR Ops escalation packet with manager brief, workload trend snapshot, and action checklist.",
+      "followUpCadence": "48-hour follow-up, then weekly until risk returns below sustained-high threshold."
+    },
+    {
+      "employeeId": "olivia-clark",
+      "employeeName": "Olivia Clark",
+      "team": "Customer Operations",
+      "riskScore": 94,
+      "riskBucket": "High",
+      "previousWeekRiskScore": 89,
+      "previousWeekRiskBucket": "High",
+      "route": "Sustained High: HR Ops queue",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Escalate to HR Ops case handling with manager brief in this cycle.",
+      "decisionRationale": "Current risk is 94/100 High, previous week context is 89/100, and the 8-week trend is worsening with sustained overload signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "Medium: employee nudge",
+        "High: employee nudge + manager brief"
+      ],
+      "actionArtifact": "HR Ops escalation packet with manager brief, workload trend snapshot, and action checklist.",
+      "followUpCadence": "48-hour follow-up, then weekly until risk returns below sustained-high threshold."
+    },
+    {
+      "employeeId": "samira-khan",
+      "employeeName": "Samira Khan",
+      "team": "Product & Engineering",
+      "riskScore": 46,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 46/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "daniel-wu",
+      "employeeName": "Daniel Wu",
+      "team": "Business Operations",
+      "riskScore": 46,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 46/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "grace-mills",
+      "employeeName": "Grace Mills",
+      "team": "Design & Quality",
+      "riskScore": 46,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 46/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "jacob-nguyen",
+      "employeeName": "Jacob Nguyen",
+      "team": "Business Operations",
+      "riskScore": 46,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 47,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 46/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "paul-lam",
+      "employeeName": "Paul Lam",
+      "team": "Business Operations",
+      "riskScore": 46,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 47,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 46/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "diego-santos",
+      "employeeName": "Diego Santos",
+      "team": "Customer Operations",
+      "riskScore": 43,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 43/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "liam-owens",
+      "employeeName": "Liam Owens",
+      "team": "Customer Operations",
+      "riskScore": 43,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 43/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "amina-yusuf",
+      "employeeName": "Amina Yusuf",
+      "team": "People & Program Operations",
+      "riskScore": 43,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 41,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 43/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "charlotte-rivera",
+      "employeeName": "Charlotte Rivera",
+      "team": "People & Program Operations",
+      "riskScore": 43,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 43/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "farid-hassan",
+      "employeeName": "Farid Hassan",
+      "team": "Customer Operations",
+      "riskScore": 43,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 43/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "leo-brooks",
+      "employeeName": "Leo Brooks",
+      "team": "Product & Engineering",
+      "riskScore": 43,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 44,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 43/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "priya-nair",
+      "employeeName": "Priya Nair",
+      "team": "Design & Quality",
+      "riskScore": 40,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 41,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 40/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    },
+    {
+      "employeeId": "isabella-rossi",
+      "employeeName": "Isabella Rossi",
+      "team": "People & Program Operations",
+      "riskScore": 40,
+      "riskBucket": "Medium",
+      "previousWeekRiskScore": 41,
+      "previousWeekRiskBucket": "Medium",
+      "route": "Medium: employee nudge",
+      "nextStep": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week.",
+      "decisionRationale": "Current risk is 40/100 Medium with manageable strain signals.",
+      "consideredAlternatives": [
+        "Low: no action or monitor",
+        "High: employee nudge + manager brief",
+        "Sustained High: HR Ops queue"
+      ],
+      "actionArtifact": "Employee nudge packet with focused scheduling actions and one-week checkpoint.",
+      "followUpCadence": "7-day follow-up in next cycle."
+    }
+  ],
+  "hrMemo": "Org-wide run completed for 24 employees. Current mix: 9 low, 13 medium, 2 high, with 2 sustained-high profiles. 2 employees are routed directly to HR Ops queue. 2 employees show sustained overload across the 8-week trend and are routed to HR Ops. Continue weekly monitoring with manager follow-through on medium and high routes.",
+  "impactSimulation": {
+    "projectedMeetingHoursReduced": 9,
+    "projectedFocusHoursGained": 7,
+    "before": {
+      "avgRiskScore": 44,
+      "highRiskCount": 2,
+      "sustainedHighCount": 2,
+      "interventionQueueCount": 15
+    },
+    "after": {
+      "projectedAvgRiskScore": 28,
+      "projectedHighRiskCount": 1,
+      "projectedSustainedHighCount": 1,
+      "projectedInterventionQueueCount": 9
+    },
+    "assumptions": [
+      "One-week projection assumes intervention adherence for routed employees.",
+      "Medium route lowers projected risk by operational nudges and meeting hygiene.",
+      "High and sustained-high routes include manager briefing and tighter follow-up cadence."
+    ]
+  },
+  "selectedEmployeeDetail": {
+    "employee": {
+      "id": "maya-chen",
+      "name": "Maya Chen",
+      "role": "Product Operations Lead",
+      "team": "Product & Engineering",
+      "manager": "Lina Park",
+      "timezone": "UTC+7"
+    },
+    "scoring": {
+      "overallRiskScore": 32,
+      "riskBucket": "Low",
+      "topDrivers": [
+        "Mild signal: self-assessment indicates elevated energy strain; monitor for trend changes.",
+        "Mild signal: meeting load is using a large share of the 40-hour week; monitor for trend changes.",
+        "Mild signal: back-to-back meeting days are eroding recovery time; monitor for trend changes."
+      ],
+      "calendarMetrics": {
+        "weeklyMeetingHours": 10.5,
+        "meetingRatio": 0.26,
+        "backToBackDays": 2,
+        "afterHoursMeetings": 0,
+        "estimatedFocusHours": 27
+      },
+      "selfAssessmentScore": 45,
+      "calendarOverloadRisk": 24
+    },
+    "monthlyTrend": {
+      "employeeId": "maya-chen",
+      "trendDirection": "stable",
+      "highRiskWeeks": 0,
+      "mediumOrHighWeeks": 0,
+      "riskDelta": 3,
+      "sustainedPatternDetected": false,
+      "summary": "Trend stable: 0 high-risk weeks over 8 weeks."
+    },
+    "analyzer": {
+      "summary": "Mediary detected low overload risk at 32/100 with 10.5 meeting hours and 27 estimated focus hours.",
+      "topDrivers": [
+        "Mild signal: self-assessment indicates elevated energy strain; monitor for trend changes.",
+        "Mild signal: meeting load is using a large share of the 40-hour week; monitor for trend changes.",
+        "Mild signal: back-to-back meeting days are eroding recovery time; monitor for trend changes."
+      ],
+      "suggestedActionCategories": [
+        "focus block protection"
+      ],
+      "meetingCandidates": [
+        {
+          "meetingId": "maya-chen-monday-1",
+          "title": "Cross-team launch sync",
+          "day": "Monday",
+          "currentTime": "09:30-10:30",
+          "recommendedChange": "compress",
+          "reason": "Recurring coordination window can be tightened with agenda and explicit decision owner."
+        },
+        {
+          "meetingId": "maya-chen-monday-2",
+          "title": "Dependency review",
+          "day": "Monday",
+          "currentTime": "13:45-14:45",
+          "recommendedChange": "compress",
+          "reason": "Recurring coordination window can be tightened with agenda and explicit decision owner."
+        },
+        {
+          "meetingId": "maya-chen-tuesday-3",
+          "title": "Sprint planning",
+          "day": "Tuesday",
+          "currentTime": "13:00-14:30",
+          "recommendedChange": "compress",
+          "reason": "Recurring coordination window can be tightened with agenda and explicit decision owner."
+        },
+        {
+          "meetingId": "maya-chen-wednesday-4",
+          "title": "Stakeholder update",
+          "day": "Wednesday",
+          "currentTime": "09:45-10:45",
+          "recommendedChange": "async",
+          "reason": "Status-heavy exchange can move to structured async updates with blocker escalation path."
+        }
+      ]
+    },
+    "diplomat": {
+      "interventions": [
+        {
+          "title": "Compress recurring coordination",
+          "category": "meeting compression",
+          "owner": "Employee and meeting owners",
+          "action": "Reduce \"Cross-team launch sync\" from 09:30-10:30 to a 30-minute decision-first agenda.",
+          "expectedImpact": "Returns predictable execution time and reduces fragmentation."
+        },
+        {
+          "title": "Convert status traffic to async",
+          "category": "async conversion",
+          "owner": "Team leads",
+          "action": "Move \"Stakeholder update\" to written updates plus optional office hours for blockers.",
+          "expectedImpact": "Improves focus continuity without reducing visibility."
+        },
+        {
+          "title": "Protect weekly focus blocks",
+          "category": "focus block protection",
+          "owner": "Employee and manager",
+          "action": "Reserve two 90-minute focus blocks on the most fragmented days and treat them as no-meeting windows.",
+          "expectedImpact": "Protects concentration capacity without reducing essential alignment."
+        }
+      ],
+      "diplomaticMessageDraft": "Hi team, I noticed this week has signs of focus erosion from meeting fragmentation. To protect workflow sustainability while keeping visibility high, could we try three adjustments: Reduce \"Cross-team launch sync\" from 09:30-10:30 to a 30-minute decision-first agenda. Move \"Stakeholder update\" to written updates plus optional office hours for blockers. Reserve two 90-minute focus blocks on the most fragmented days and treat them as no-meeting windows. This should keep coordination quality high while creating clearer execution time.",
+      "cleanedWeekPreview": [
+        {
+          "day": "Monday",
+          "focusBlocks": [
+            "10:30-12:00 Focus block",
+            "15:30-17:00 Delivery block"
+          ],
+          "meetingAdjustments": [
+            "Compress Cross-team launch sync",
+            "Compress Dependency review"
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "focusBlocks": [
+            "10:30-12:00 Focus block",
+            "15:00-16:30 Deep work"
+          ],
+          "meetingAdjustments": [
+            "Compress Sprint planning"
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "focusBlocks": [
+            "11:00-12:30 Focus block",
+            "16:00-17:30 Follow-through block"
+          ],
+          "meetingAdjustments": [
+            "Move Stakeholder update async"
+          ]
+        },
+        {
+          "day": "Thursday",
+          "focusBlocks": [
+            "14:00-16:00 Deep work"
+          ],
+          "meetingAdjustments": [
+            "No major meeting change needed"
+          ]
+        },
+        {
+          "day": "Friday",
+          "focusBlocks": [
+            "11:00-12:30 Planning and wrap-up"
+          ],
+          "meetingAdjustments": [
+            "No major meeting change needed"
+          ]
+        }
+      ]
+    },
+    "route": "Low: no action or monitor"
+  },
+  "toolInvocations": [
+    {
+      "id": "tool-1",
+      "tool": "HR_OPS_CASE_TOOL",
+      "targetEmployeeId": "alex-johnson",
+      "targetEmployeeName": "Alex Johnson",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared HR Ops case packet with sustained-load evidence."
+    },
+    {
+      "id": "tool-2",
+      "tool": "MANAGER_BRIEF_TOOL",
+      "targetEmployeeId": "alex-johnson",
+      "targetEmployeeName": "Alex Johnson",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared manager brief with sustained-load route rationale."
+    },
+    {
+      "id": "tool-3",
+      "tool": "FOCUS_BLOCK_PLANNER",
+      "targetEmployeeId": "alex-johnson",
+      "targetEmployeeName": "Alex Johnson",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared focus-block plan for recovery and workload stabilization."
+    },
+    {
+      "id": "tool-4",
+      "tool": "FOLLOW_UP_SCHEDULER",
+      "targetEmployeeId": "alex-johnson",
+      "targetEmployeeName": "Alex Johnson",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared deterministic follow-up schedule for HR Ops review."
+    },
+    {
+      "id": "tool-5",
+      "tool": "HR_OPS_CASE_TOOL",
+      "targetEmployeeId": "olivia-clark",
+      "targetEmployeeName": "Olivia Clark",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared HR Ops case packet with sustained-load evidence."
+    },
+    {
+      "id": "tool-6",
+      "tool": "MANAGER_BRIEF_TOOL",
+      "targetEmployeeId": "olivia-clark",
+      "targetEmployeeName": "Olivia Clark",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared manager brief with sustained-load route rationale."
+    },
+    {
+      "id": "tool-7",
+      "tool": "FOCUS_BLOCK_PLANNER",
+      "targetEmployeeId": "olivia-clark",
+      "targetEmployeeName": "Olivia Clark",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared focus-block plan for recovery and workload stabilization."
+    },
+    {
+      "id": "tool-8",
+      "tool": "FOLLOW_UP_SCHEDULER",
+      "targetEmployeeId": "olivia-clark",
+      "targetEmployeeName": "Olivia Clark",
+      "route": "Sustained High: HR Ops queue",
+      "status": "executed",
+      "summary": "Prepared deterministic follow-up schedule for HR Ops review."
+    },
+    {
+      "id": "tool-9",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "samira-khan",
+      "targetEmployeeName": "Samira Khan",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-10",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "daniel-wu",
+      "targetEmployeeName": "Daniel Wu",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-11",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "grace-mills",
+      "targetEmployeeName": "Grace Mills",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-12",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "jacob-nguyen",
+      "targetEmployeeName": "Jacob Nguyen",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-13",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "paul-lam",
+      "targetEmployeeName": "Paul Lam",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-14",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "diego-santos",
+      "targetEmployeeName": "Diego Santos",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-15",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "liam-owens",
+      "targetEmployeeName": "Liam Owens",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-16",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "amina-yusuf",
+      "targetEmployeeName": "Amina Yusuf",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-17",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "charlotte-rivera",
+      "targetEmployeeName": "Charlotte Rivera",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-18",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "farid-hassan",
+      "targetEmployeeName": "Farid Hassan",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-19",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "leo-brooks",
+      "targetEmployeeName": "Leo Brooks",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-20",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "priya-nair",
+      "targetEmployeeName": "Priya Nair",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    },
+    {
+      "id": "tool-21",
+      "tool": "EMPLOYEE_NUDGE_TOOL",
+      "targetEmployeeId": "isabella-rossi",
+      "targetEmployeeName": "Isabella Rossi",
+      "route": "Medium: employee nudge",
+      "status": "executed",
+      "summary": "Prepared employee nudge action draft and execution checklist."
+    }
+  ],
+  "actionArtifacts": [
+    {
+      "id": "artifact-1",
+      "type": "hr_ops_case",
+      "employeeId": "alex-johnson",
+      "employeeName": "Alex Johnson",
+      "owner": "HR Ops",
+      "title": "HR Ops case for Alex Johnson",
+      "body": "Current risk is 94/100 High, previous week context is 89/100, and the 8-week trend is worsening with sustained overload signals. Run an employee check-in and add recovery buffers between meetings this week. Escalate to HR Ops case handling with manager brief in this cycle."
+    },
+    {
+      "id": "artifact-2",
+      "type": "manager_brief",
+      "employeeId": "alex-johnson",
+      "employeeName": "Alex Johnson",
+      "owner": "Manager",
+      "title": "Manager brief for Alex Johnson",
+      "body": "Current risk is 94/100 High, previous week context is 89/100, and the 8-week trend is worsening with sustained overload signals. Follow-up cadence: 48-hour follow-up, then weekly until risk returns below sustained-high threshold."
+    },
+    {
+      "id": "artifact-3",
+      "type": "focus_block_plan",
+      "employeeId": "alex-johnson",
+      "employeeName": "Alex Johnson",
+      "owner": "HR Ops",
+      "title": "Focus block plan for Alex Johnson",
+      "body": "Protect deterministic recovery and focus blocks while reducing recurring meeting pressure."
+    },
+    {
+      "id": "artifact-4",
+      "type": "hr_ops_case",
+      "employeeId": "olivia-clark",
+      "employeeName": "Olivia Clark",
+      "owner": "HR Ops",
+      "title": "HR Ops case for Olivia Clark",
+      "body": "Current risk is 94/100 High, previous week context is 89/100, and the 8-week trend is worsening with sustained overload signals. Run an employee check-in and add recovery buffers between meetings this week. Escalate to HR Ops case handling with manager brief in this cycle."
+    },
+    {
+      "id": "artifact-5",
+      "type": "manager_brief",
+      "employeeId": "olivia-clark",
+      "employeeName": "Olivia Clark",
+      "owner": "Manager",
+      "title": "Manager brief for Olivia Clark",
+      "body": "Current risk is 94/100 High, previous week context is 89/100, and the 8-week trend is worsening with sustained overload signals. Follow-up cadence: 48-hour follow-up, then weekly until risk returns below sustained-high threshold."
+    },
+    {
+      "id": "artifact-6",
+      "type": "focus_block_plan",
+      "employeeId": "olivia-clark",
+      "employeeName": "Olivia Clark",
+      "owner": "HR Ops",
+      "title": "Focus block plan for Olivia Clark",
+      "body": "Protect deterministic recovery and focus blocks while reducing recurring meeting pressure."
+    },
+    {
+      "id": "artifact-7",
+      "type": "employee_nudge",
+      "employeeId": "samira-khan",
+      "employeeName": "Samira Khan",
+      "owner": "Employee",
+      "title": "Employee nudge for Samira Khan",
+      "body": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-8",
+      "type": "employee_nudge",
+      "employeeId": "daniel-wu",
+      "employeeName": "Daniel Wu",
+      "owner": "Employee",
+      "title": "Employee nudge for Daniel Wu",
+      "body": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-9",
+      "type": "employee_nudge",
+      "employeeId": "grace-mills",
+      "employeeName": "Grace Mills",
+      "owner": "Employee",
+      "title": "Employee nudge for Grace Mills",
+      "body": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-10",
+      "type": "employee_nudge",
+      "employeeId": "jacob-nguyen",
+      "employeeName": "Jacob Nguyen",
+      "owner": "Employee",
+      "title": "Employee nudge for Jacob Nguyen",
+      "body": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-11",
+      "type": "employee_nudge",
+      "employeeId": "paul-lam",
+      "employeeName": "Paul Lam",
+      "owner": "Employee",
+      "title": "Employee nudge for Paul Lam",
+      "body": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-12",
+      "type": "employee_nudge",
+      "employeeId": "diego-santos",
+      "employeeName": "Diego Santos",
+      "owner": "Employee",
+      "title": "Employee nudge for Diego Santos",
+      "body": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-13",
+      "type": "employee_nudge",
+      "employeeId": "liam-owens",
+      "employeeName": "Liam Owens",
+      "owner": "Employee",
+      "title": "Employee nudge for Liam Owens",
+      "body": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-14",
+      "type": "employee_nudge",
+      "employeeId": "amina-yusuf",
+      "employeeName": "Amina Yusuf",
+      "owner": "Employee",
+      "title": "Employee nudge for Amina Yusuf",
+      "body": "Run an employee check-in and trim recurring coordination load for the next cycle. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-15",
+      "type": "employee_nudge",
+      "employeeId": "charlotte-rivera",
+      "employeeName": "Charlotte Rivera",
+      "owner": "Employee",
+      "title": "Employee nudge for Charlotte Rivera",
+      "body": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-16",
+      "type": "employee_nudge",
+      "employeeId": "farid-hassan",
+      "employeeName": "Farid Hassan",
+      "owner": "Employee",
+      "title": "Employee nudge for Farid Hassan",
+      "body": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-17",
+      "type": "employee_nudge",
+      "employeeId": "leo-brooks",
+      "employeeName": "Leo Brooks",
+      "owner": "Employee",
+      "title": "Employee nudge for Leo Brooks",
+      "body": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-18",
+      "type": "employee_nudge",
+      "employeeId": "priya-nair",
+      "employeeName": "Priya Nair",
+      "owner": "Employee",
+      "title": "Employee nudge for Priya Nair",
+      "body": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week."
+    },
+    {
+      "id": "artifact-19",
+      "type": "employee_nudge",
+      "employeeId": "isabella-rossi",
+      "employeeName": "Isabella Rossi",
+      "owner": "Employee",
+      "title": "Employee nudge for Isabella Rossi",
+      "body": "Run an employee check-in and add recovery buffers between meetings this week. Send employee nudge with focused plan this week."
+    }
+  ],
+  "followUpTasks": [
+    {
+      "id": "follow-up-1",
+      "employeeId": "alex-johnson",
+      "employeeName": "Alex Johnson",
+      "owner": "HR Ops",
+      "dueIn": "48 hours",
+      "trigger": "Sustained high route with multi-week overload evidence.",
+      "task": "Review HR Ops case packet, confirm manager alignment, and validate focus-block execution.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-2",
+      "employeeId": "olivia-clark",
+      "employeeName": "Olivia Clark",
+      "owner": "HR Ops",
+      "dueIn": "48 hours",
+      "trigger": "Sustained high route with multi-week overload evidence.",
+      "task": "Review HR Ops case packet, confirm manager alignment, and validate focus-block execution.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-3",
+      "employeeId": "samira-khan",
+      "employeeName": "Samira Khan",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-4",
+      "employeeId": "daniel-wu",
+      "employeeName": "Daniel Wu",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-5",
+      "employeeId": "grace-mills",
+      "employeeName": "Grace Mills",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-6",
+      "employeeId": "jacob-nguyen",
+      "employeeName": "Jacob Nguyen",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-7",
+      "employeeId": "paul-lam",
+      "employeeName": "Paul Lam",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-8",
+      "employeeId": "diego-santos",
+      "employeeName": "Diego Santos",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-9",
+      "employeeId": "liam-owens",
+      "employeeName": "Liam Owens",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-10",
+      "employeeId": "amina-yusuf",
+      "employeeName": "Amina Yusuf",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-11",
+      "employeeId": "charlotte-rivera",
+      "employeeName": "Charlotte Rivera",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-12",
+      "employeeId": "farid-hassan",
+      "employeeName": "Farid Hassan",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-13",
+      "employeeId": "leo-brooks",
+      "employeeName": "Leo Brooks",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-14",
+      "employeeId": "priya-nair",
+      "employeeName": "Priya Nair",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    },
+    {
+      "id": "follow-up-15",
+      "employeeId": "isabella-rossi",
+      "employeeName": "Isabella Rossi",
+      "owner": "Employee",
+      "dueIn": "7 days",
+      "trigger": "Medium route employee nudge checkpoint.",
+      "task": "Review nudge actions and report next-cycle coordination and focus improvements.",
+      "status": "queued"
+    }
+  ],
+  "runLedger": {
+    "runId": "run-sustained-high-24-15",
+    "scenario": "sustained-high",
+    "startedAt": "2026-05-15T13:51:01.285Z",
+    "completedAt": "2026-05-15T13:51:01.285Z",
+    "employeesAnalyzed": 24,
+    "decisionsMade": 15,
+    "toolsExecuted": 21,
+    "actionArtifactsCreated": 19,
+    "followUpsQueued": 15
+  },
+  "orgHealth": {
+    "status": "attention",
+    "score": 90,
+    "anomalies": [],
+    "recommendation": "Review recommended — sustained-high employees require manager attention."
+  },
+  "executionTrace": [
+    {
+      "step": 1,
+      "phase": "observe",
+      "name": "Observe org dataset",
+      "status": "completed",
+      "output": "Loaded deterministic org dataset with 24 employees and weekly calendars using the \"sustained-high\" scenario profile."
+    },
+    {
+      "step": 2,
+      "phase": "reason",
+      "name": "Analyst: Calculate employee metrics",
+      "status": "completed",
+      "output": "Computed weekly meeting load, meeting ratio, back-to-back days, after-hours meetings, focus estimate, and energy strain for each employee."
+    },
+    {
+      "step": 3,
+      "phase": "reason",
+      "name": "Analyst: Aggregate team risk",
+      "status": "completed",
+      "output": "Compared 8-week workload trend and detected sustained overload patterns, then aggregated team heatmap across 5 teams with risk buckets and average risk scores."
+    },
+    {
+      "step": 4,
+      "phase": "decide",
+      "name": "Analyst: Route interventions",
+      "status": "completed",
+      "output": "Applied routing policy with evidence from current risk, previous-week context, and 8-week trend. Routes: HR Ops=2, manager brief=2, employee nudges=13, monitor-only=9."
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "name": "Executor: Invoke tools and create artifacts",
+      "status": "completed",
+      "output": "Executed 21 internal tool invocations across 19 stakeholder-specific action artifacts."
+    },
+    {
+      "step": 6,
+      "phase": "follow-up",
+      "name": "Executor: Queue follow-up tasks",
+      "status": "completed",
+      "output": "Queued 15 follow-up tasks by route: 48-hour HR Ops review for sustained-high, 3-working-day manager review for high, 7-day employee follow-up for medium."
+    },
+    {
+      "step": 7,
+      "phase": "supervise",
+      "name": "Supervisor: Assess org health",
+      "status": "completed",
+      "output": "Org health: attention (score 90/100). 0 anomaly(s) detected. Review recommended — sustained-high employees require manager attention."
+    }
+  ],
+  "workflowStatus": "Autonomous org-wide workload diplomacy loop completed"
+}
