@@ -2,15 +2,19 @@ import type { CalendarEvent, CalendarMetrics, Weekday } from "@/src/types/mediar
 
 const WORK_WEEK_HOURS = 40;
 const BACK_TO_BACK_GAP_MINUTES = 15;
-const weekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+export const weekdays: Weekday[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 export function timeToMinutes(time: string): number {
   const [h, m] = time.split(":").map(Number);
   return h * 60 + m;
 }
 
-function meetingDurationHours(event: CalendarEvent): number {
+export function getMeetingDurationHours(event: CalendarEvent): number {
   return (timeToMinutes(event.end) - timeToMinutes(event.start)) / 60;
+}
+
+export function formatMeetingTime(event: CalendarEvent): string {
+  return `${event.start}-${event.end}`;
 }
 
 function roundToHalfHour(value: number): number {
@@ -36,7 +40,7 @@ function hasBackToBack(events: CalendarEvent[], day: Weekday): boolean {
 
 export function calculateCalendarMetrics(events: CalendarEvent[]): CalendarMetrics {
   const weeklyMeetingHours = roundToHalfHour(
-    events.reduce((sum, event) => sum + meetingDurationHours(event), 0),
+    events.reduce((sum, event) => sum + getMeetingDurationHours(event), 0),
   );
   const meetingRatio = roundToTwoDecimals(weeklyMeetingHours / WORK_WEEK_HOURS);
   const backToBackDays = weekdays.filter((day) => hasBackToBack(events, day)).length;

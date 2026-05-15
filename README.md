@@ -271,6 +271,7 @@ npm run build                                    # Build
 - `src/modules/state/` — agent memory, run ledger, week comparison, follow-up consumer
 - `src/data/` — deterministic sample org dataset (8 weeks per employee)
 - `src/types/` — output contracts and shared types
+- `lib/` — optional UI compatibility re-exports only (`src/` remains source of truth)
 - `scripts/` — CLI runner and loop runner
 - `.mediary/state/` — runtime state (ledgers, memory) — gitignored
 
