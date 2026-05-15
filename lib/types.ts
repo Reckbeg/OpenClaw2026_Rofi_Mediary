@@ -91,4 +91,20 @@ export type AnalyzeResponse = {
   scoring: ScoringResult;
   analyzer: AnalyzerOutput;
   diplomat: WorkflowDiplomatOutput;
+  executionTrace: ExecutionTraceStep[];
+};
+
+export type ExecutionStatus = "completed";
+
+export type ExecutionTraceStep = {
+  step: 1 | 2 | 3 | 4 | 5 | 6;
+  name:
+    | "Calendar Parser Tool"
+    | "Metrics Engine Tool"
+    | "Self-Assessment Tool"
+    | "Risk Scoring Tool"
+    | "Analyzer Agent"
+    | "Workflow Diplomat Agent";
+  status: ExecutionStatus;
+  output: string;
 };
