@@ -11,3 +11,4 @@ dist
 .hermes/
 tsconfig.tsbuildinfo
 *.tsbuildinfo
+tsconfig.tsbuildinfo
