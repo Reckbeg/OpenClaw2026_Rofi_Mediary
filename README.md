@@ -1,6 +1,6 @@
 # Mediary
 
-Stateful autonomous workload diplomacy loop for small teams using deterministic sample data.
+An AI workplace diplomat that detects invisible overload patterns before they become burnout.
 
 ## Problem
 
