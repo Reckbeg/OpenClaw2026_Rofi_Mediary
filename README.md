@@ -1,6 +1,6 @@
 # Mediary
 
-Mediary is an AI workplace diplomat that detects invisible overload patterns before they become burnout.
+Mediary is an AI workplace assistant that detects invisible overload patterns before they become burnout.
 
 ## Project Overview
 
