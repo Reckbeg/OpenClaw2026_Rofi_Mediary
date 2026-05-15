@@ -1,5 +1,17 @@
 import type { AgentIdentity } from "@/src/types/mediary";
 
+/**
+ * Agent Identity Definitions
+ *
+ * Full persona documentation lives in markdown files:
+ *   - src/agents/identities/analyst.md   (🧠 Aria)
+ *   - src/agents/identities/executor.md  (⚡ Ethan)
+ *   - src/agents/identities/supervisor.md (🔍 Sol)
+ *
+ * The markdown files are the human-readable source of truth for agent personas.
+ * The TypeScript objects below are the runtime representation used by the pipeline.
+ */
+
 export const ANALYST_IDENTITY: AgentIdentity = {
   role: "analyst",
   name: "Aria",
