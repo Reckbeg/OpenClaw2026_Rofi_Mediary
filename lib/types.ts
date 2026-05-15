@@ -2,6 +2,7 @@ import type { CalendarEvent } from "@/src/types/mediary";
 
 // Compatibility shim. Source of truth lives in src/.
 export type {
+  AgentStreamEvent,
   AnalyzerOutput,
   CalendarEvent as CalendarMeeting,
   CalendarMetrics,

@@ -4,8 +4,6 @@ import type { AnalyzeResponse, RiskBucket } from "@/lib/types";
 
 type ResultDashboardProps = {
   result: AnalyzeResponse | null;
-  isLoading: boolean;
-  loadingMessage: string;
   lastScenario: AnalyzeResponse["scenario"] | null;
 };
 
@@ -26,19 +24,7 @@ function healthTone(status: AnalyzeResponse["orgHealth"]["status"]): string {
   return "text-rose-700";
 }
 
-export function ResultDashboard({ result, isLoading, loadingMessage, lastScenario }: ResultDashboardProps) {
-  if (isLoading) {
-    return (
-      <section className="rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Autonomous run output</p>
-        <h2 className="mt-2 text-2xl font-semibold text-stone-950">Agent operations console</h2>
-        <div className="mt-4 rounded-2xl border border-stone-100 bg-stone-50 p-5 text-sm text-stone-600">
-          {loadingMessage}
-        </div>
-      </section>
-    );
-  }
-
+export function ResultDashboard({ result, lastScenario }: ResultDashboardProps) {
   if (!result) {
     return (
       <section className="rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-sm">
@@ -68,8 +54,8 @@ export function ResultDashboard({ result, isLoading, loadingMessage, lastScenari
           </span>
         </div>
         <p className="mt-2 text-sm leading-6 text-stone-600">
-          Scenario completed: {result.scenario}. This run captures workload strain routing, execution artifacts,
-          and supervisor checks for the org-wide cycle.
+          Scenario completed: {result.scenario}. Mediary completed a 3-agent workload diplomacy cycle: Analyst
+          reasoned over risk, Executor created action artifacts, and Supervisor validated org health.
         </p>
       </div>
 

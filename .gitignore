@@ -9,3 +9,5 @@ dist
 .mediary
 .mediary/state/
 .hermes/
+tsconfig.tsbuildinfo
+*.tsbuildinfo

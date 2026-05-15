@@ -233,6 +233,26 @@ export type MediaryLoopInput = {
 
 export type DemoScenario = "baseline" | "sustained-high";
 
+export type AgentStreamEvent = {
+  type:
+    | "run.started"
+    | "analyst.started"
+    | "analyst.completed"
+    | "executor.started"
+    | "executor.tool_invoked"
+    | "executor.artifact_created"
+    | "executor.followup_queued"
+    | "executor.completed"
+    | "supervisor.started"
+    | "supervisor.completed"
+    | "run.completed"
+    | "run.failed";
+  agent?: "Aria Analyst" | "Ethan Executor" | "Sol Supervisor";
+  title: string;
+  detail: string;
+  payload?: unknown;
+};
+
 export type InterventionRoute =
   | "Low: no action or monitor"
   | "Medium: employee nudge"
