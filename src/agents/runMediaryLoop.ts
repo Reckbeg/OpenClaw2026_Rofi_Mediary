@@ -8,17 +8,21 @@ import {
 } from "@/src/modules/scoring/selfAssessment";
 import { computeRiskScore } from "@/src/modules/scoring/riskScore";
 import type {
+  ActionArtifact,
   DemoScenario,
   EmployeeLoopDetail,
   ExecutionTraceStep,
+  FollowUpTask,
   InterventionQueueItem,
   InterventionRoute,
   MediaryLoopInput,
   MediaryLoopOutput,
   MonthlyTrendSummary,
   RiskBucket,
+  RunLedger,
   SelfAssessmentAnswer,
   TeamHeatmapItem,
+  ToolInvocation,
   WeeklyRiskSnapshot,
 } from "@/src/types/mediary";
 
@@ -34,10 +38,10 @@ function buildExecutionTrace({
   teamCount: number;
   queueCount: number;
   routeCounts: {
-    low: number;
-    medium: number;
-    high: number;
-    sustainedHigh: number;
+    hrOps: number;
+    managerBrief: number;
+    employeeNudges: number;
+    monitorOnly: number;
   };
 }): ExecutionTraceStep[] {
   return [
@@ -68,14 +72,14 @@ function buildExecutionTrace({
       phase: "decide",
       name: "Route interventions",
       status: "completed",
-      output: `Applied routing policy with evidence from current risk, previous-week context, and 4-week trend. Route counts: Low=${routeCounts.low}, Medium=${routeCounts.medium}, High=${routeCounts.high}, Sustained High=${routeCounts.sustainedHigh}.`,
+      output: `Applied routing policy with evidence from current risk, previous-week context, and 4-week trend. Routes: HR Ops=${routeCounts.hrOps}, manager brief=${routeCounts.managerBrief}, employee nudges=${routeCounts.employeeNudges}, monitor-only=${routeCounts.monitorOnly}.`,
     },
     {
       step: 5,
       phase: "execute",
       name: "Generate stakeholder messages",
       status: "completed",
-      output: `Generated ${queueCount} action packets with decision rationale, alternatives considered, action artifacts, and stakeholder-ready workflow messages.`,
+      output: "Executed internal action adapters and created stakeholder-specific action artifacts.",
     },
     {
       step: 6,
@@ -83,7 +87,7 @@ function buildExecutionTrace({
       name: "Follow-up plan",
       status: "completed",
       output:
-        "Scheduled route-based cadence: monitor routes weekly, medium routes in 7 days, high routes in 3 business days, and sustained-high routes in 48 hours plus weekly trend checks.",
+        "Queued follow-up tasks by route: 48-hour HR Ops review for sustained-high, 3-working-day manager review for high, 7-day employee follow-up for medium.",
     },
   ];
 }
@@ -352,6 +356,202 @@ function toQueueItem(detail: EmployeeLoopDetail): InterventionQueueItem {
   };
 }
 
+function buildToolInvocations(queue: InterventionQueueItem[]): ToolInvocation[] {
+  const invocations: ToolInvocation[] = [];
+  queue.forEach((item) => {
+    const pushTool = (tool: ToolInvocation["tool"], summary: string) => {
+      invocations.push({
+        id: `tool-${invocations.length + 1}`,
+        tool,
+        targetEmployeeId: item.employeeId,
+        targetEmployeeName: item.employeeName,
+        route: item.route,
+        status: "executed",
+        summary,
+      });
+    };
+
+    if (item.route === "Medium: employee nudge") {
+      pushTool("EMPLOYEE_NUDGE_TOOL", "Prepared employee nudge action draft and execution checklist.");
+      return;
+    }
+    if (item.route === "High: employee nudge + manager brief") {
+      pushTool("EMPLOYEE_NUDGE_TOOL", "Prepared employee nudge action draft and execution checklist.");
+      pushTool("MANAGER_BRIEF_TOOL", "Prepared manager brief with route rationale and next-step expectations.");
+      pushTool("FOCUS_BLOCK_PLANNER", "Prepared focus-block plan for meeting density reduction.");
+      return;
+    }
+    if (item.route === "Sustained High: HR Ops queue") {
+      pushTool("HR_OPS_CASE_TOOL", "Prepared HR Ops case packet with sustained-load evidence.");
+      pushTool("MANAGER_BRIEF_TOOL", "Prepared manager brief with sustained-load route rationale.");
+      pushTool("FOCUS_BLOCK_PLANNER", "Prepared focus-block plan for recovery and workload stabilization.");
+      pushTool("FOLLOW_UP_SCHEDULER", "Prepared deterministic follow-up schedule for HR Ops review.");
+      return;
+    }
+    pushTool("FOLLOW_UP_SCHEDULER", "Prepared monitor-only weekly review task.");
+  });
+
+  return invocations;
+}
+
+function buildActionArtifacts(queue: InterventionQueueItem[]): ActionArtifact[] {
+  const artifacts: ActionArtifact[] = [];
+  const pushArtifact = (
+    item: InterventionQueueItem,
+    type: ActionArtifact["type"],
+    owner: ActionArtifact["owner"],
+    title: string,
+    body: string,
+  ) => {
+    artifacts.push({
+      id: `artifact-${artifacts.length + 1}`,
+      type,
+      employeeId: item.employeeId,
+      employeeName: item.employeeName,
+      owner,
+      title,
+      body,
+    });
+  };
+
+  queue.forEach((item) => {
+    if (item.route === "Medium: employee nudge") {
+      pushArtifact(
+        item,
+        "employee_nudge",
+        "Employee",
+        `Employee nudge for ${item.employeeName}`,
+        item.nextStep,
+      );
+      return;
+    }
+    if (item.route === "High: employee nudge + manager brief") {
+      pushArtifact(
+        item,
+        "employee_nudge",
+        "Employee",
+        `Employee nudge for ${item.employeeName}`,
+        item.nextStep,
+      );
+      pushArtifact(
+        item,
+        "manager_brief",
+        "Manager",
+        `Manager brief for ${item.employeeName}`,
+        `${item.decisionRationale} Follow-up cadence: ${item.followUpCadence}`,
+      );
+      pushArtifact(
+        item,
+        "focus_block_plan",
+        "Manager",
+        `Focus block plan for ${item.employeeName}`,
+        "Protect two deterministic deep-work windows and reduce dense meeting clusters this cycle.",
+      );
+      return;
+    }
+    if (item.route === "Sustained High: HR Ops queue") {
+      pushArtifact(
+        item,
+        "hr_ops_case",
+        "HR Ops",
+        `HR Ops case for ${item.employeeName}`,
+        `${item.decisionRationale} ${item.nextStep}`,
+      );
+      pushArtifact(
+        item,
+        "manager_brief",
+        "Manager",
+        `Manager brief for ${item.employeeName}`,
+        `${item.decisionRationale} Follow-up cadence: ${item.followUpCadence}`,
+      );
+      pushArtifact(
+        item,
+        "focus_block_plan",
+        "HR Ops",
+        `Focus block plan for ${item.employeeName}`,
+        "Protect deterministic recovery and focus blocks while reducing recurring meeting pressure.",
+      );
+      return;
+    }
+    pushArtifact(
+      item,
+      "employee_nudge",
+      "Employee",
+      `Monitor memo for ${item.employeeName}`,
+      "Maintain current operating pattern and reassess at next cycle.",
+    );
+  });
+
+  return artifacts;
+}
+
+function buildFollowUpTasks(queue: InterventionQueueItem[]): FollowUpTask[] {
+  return queue.map((item, index) => {
+    if (item.route === "Sustained High: HR Ops queue") {
+      return {
+        id: `follow-up-${index + 1}`,
+        employeeId: item.employeeId,
+        employeeName: item.employeeName,
+        owner: "HR Ops",
+        dueIn: "48 hours",
+        trigger: "Sustained high route with multi-week overload evidence.",
+        task: "Review HR Ops case packet, confirm manager alignment, and validate focus-block execution.",
+        status: "queued",
+      };
+    }
+    if (item.route === "High: employee nudge + manager brief") {
+      return {
+        id: `follow-up-${index + 1}`,
+        employeeId: item.employeeId,
+        employeeName: item.employeeName,
+        owner: "Manager",
+        dueIn: "3 working days",
+        trigger: "High route requiring manager brief and execution check.",
+        task: "Check action artifact adoption and confirm meeting-load reduction progress.",
+        status: "queued",
+      };
+    }
+    return {
+      id: `follow-up-${index + 1}`,
+      employeeId: item.employeeId,
+      employeeName: item.employeeName,
+      owner: "Employee",
+      dueIn: "7 days",
+      trigger: "Medium route employee nudge checkpoint.",
+      task: "Review nudge actions and report next-cycle coordination and focus improvements.",
+      status: "queued",
+    };
+  });
+}
+
+function buildRunLedger({
+  scenario,
+  employeeDetails,
+  queue,
+  toolInvocations,
+  actionArtifacts,
+  followUpTasks,
+}: {
+  scenario: DemoScenario;
+  employeeDetails: EmployeeLoopDetail[];
+  queue: InterventionQueueItem[];
+  toolInvocations: ToolInvocation[];
+  actionArtifacts: ActionArtifact[];
+  followUpTasks: FollowUpTask[];
+}): RunLedger {
+  return {
+    runId: `run-${scenario}-${employeeDetails.length}-${queue.length}`,
+    scenario,
+    startedAt: "2026-05-15T09:00:00.000Z",
+    completedAt: "2026-05-15T09:00:06.000Z",
+    employeesAnalyzed: employeeDetails.length,
+    decisionsMade: queue.length,
+    toolsExecuted: toolInvocations.length,
+    actionArtifactsCreated: actionArtifacts.length,
+    followUpsQueued: followUpTasks.length,
+  };
+}
+
 function getRiskBucket(score: number): RiskBucket {
   if (score >= 80) return "High";
   if (score >= 40) return "Medium";
@@ -510,10 +710,14 @@ export function runOrgMediaryLoop(input: MediaryLoopInput = {}): MediaryLoopOutp
     (detail) => detail.route === "Sustained High: HR Ops queue",
   ).length;
   const routeCounts = {
-    low: employeeDetails.filter((detail) => detail.route === "Low: no action or monitor").length,
-    medium: employeeDetails.filter((detail) => detail.route === "Medium: employee nudge").length,
-    high: employeeDetails.filter((detail) => detail.route === "High: employee nudge + manager brief").length,
-    sustainedHigh: sustainedHighCount,
+    hrOps: employeeDetails.filter((detail) => detail.route === "Sustained High: HR Ops queue").length,
+    managerBrief: employeeDetails.filter(
+      (detail) =>
+        detail.route === "High: employee nudge + manager brief" ||
+        detail.route === "Sustained High: HR Ops queue",
+    ).length,
+    employeeNudges: employeeDetails.filter((detail) => detail.route === "Medium: employee nudge").length,
+    monitorOnly: employeeDetails.filter((detail) => detail.route === "Low: no action or monitor").length,
   };
 
   const orgSummary: MediaryLoopOutput["orgSummary"] = {
@@ -544,6 +748,17 @@ export function runOrgMediaryLoop(input: MediaryLoopInput = {}): MediaryLoopOutp
     .filter((detail) => detail.route !== "Low: no action or monitor")
     .map(toQueueItem)
     .sort((a, b) => b.riskScore - a.riskScore);
+  const toolInvocations = buildToolInvocations(interventionQueue);
+  const actionArtifacts = buildActionArtifacts(interventionQueue);
+  const followUpTasks = buildFollowUpTasks(interventionQueue);
+  const runLedger = buildRunLedger({
+    scenario,
+    employeeDetails,
+    queue: interventionQueue,
+    toolInvocations,
+    actionArtifacts,
+    followUpTasks,
+  });
   const impactSimulation = buildImpactSimulation({
     summary: orgSummary,
     queue: interventionQueue,
@@ -559,6 +774,10 @@ export function runOrgMediaryLoop(input: MediaryLoopInput = {}): MediaryLoopOutp
     hrMemo: buildHrMemo(orgSummary, interventionQueue, monthlyTrendOrgSummary),
     impactSimulation,
     selectedEmployeeDetail,
+    toolInvocations,
+    actionArtifacts,
+    followUpTasks,
+    runLedger,
     executionTrace: buildExecutionTrace({
       scenario,
       totalEmployees: employeeDetails.length,

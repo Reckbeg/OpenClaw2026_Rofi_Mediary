@@ -12,4 +12,14 @@ const output = runMediaryLoop({
   selfAssessmentAnswers: defaultSelfAssessmentAnswers,
 });
 
-console.log(JSON.stringify(output, null, 2));
+const summary = {
+  workflowStatus: output.workflowStatus,
+  orgSummary: output.orgSummary,
+  interventionQueueCount: output.interventionQueue.length,
+  toolInvocationsCount: output.toolInvocations.length,
+  actionArtifactsCount: output.actionArtifacts.length,
+  followUpTasksCount: output.followUpTasks.length,
+  runLedger: output.runLedger,
+};
+
+console.log(JSON.stringify({ summary, output }, null, 2));

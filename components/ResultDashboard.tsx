@@ -132,6 +132,66 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
             </div>
           </div>
 
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Tool execution log</h3>
+            <div className="mt-3 space-y-2">
+              {result.toolInvocations.slice(0, 6).map((toolRun) => (
+                <div
+                  key={toolRun.id}
+                  className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
+                >
+                  <p>
+                    {toolRun.tool} · {toolRun.targetEmployeeName} · {toolRun.status}
+                  </p>
+                  <p className="mt-1 text-xs text-stone-600">{toolRun.summary}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Action artifacts</h3>
+            <div className="mt-3 space-y-2">
+              {result.actionArtifacts.slice(0, 4).map((artifact) => (
+                <div
+                  key={artifact.id}
+                  className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
+                >
+                  <p>
+                    {artifact.type} · {artifact.owner} · {artifact.employeeName}
+                  </p>
+                  <p className="mt-1 text-xs text-stone-600">{artifact.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Follow-up task queue</h3>
+            <div className="mt-3 space-y-2">
+              {result.followUpTasks.slice(0, 5).map((task) => (
+                <div key={task.id} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                  <p>
+                    {task.employeeName} · {task.owner} · {task.dueIn} · {task.status}
+                  </p>
+                  <p className="mt-1 text-xs text-stone-600">{task.task}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Run ledger</h3>
+            <div className="mt-2 grid gap-2 text-sm text-stone-700 md:grid-cols-2">
+              <p>Run ID: {result.runLedger.runId}</p>
+              <p>Employees analyzed: {result.runLedger.employeesAnalyzed}</p>
+              <p>Decisions made: {result.runLedger.decisionsMade}</p>
+              <p>Tools executed: {result.runLedger.toolsExecuted}</p>
+              <p>Action artifacts created: {result.runLedger.actionArtifactsCreated}</p>
+              <p>Follow-ups queued: {result.runLedger.followUpsQueued}</p>
+            </div>
+          </div>
+
           {result.interventionQueue.some(
             (item) =>
               item.route === "High: employee nudge + manager brief" ||

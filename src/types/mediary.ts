@@ -180,6 +180,58 @@ export type InterventionQueueItem = {
   followUpCadence: string;
 };
 
+export type ToolInvocation = {
+  id: string;
+  tool:
+    | "EMPLOYEE_NUDGE_TOOL"
+    | "MANAGER_BRIEF_TOOL"
+    | "HR_OPS_CASE_TOOL"
+    | "FOCUS_BLOCK_PLANNER"
+    | "FOLLOW_UP_SCHEDULER";
+  targetEmployeeId: string;
+  targetEmployeeName: string;
+  route: InterventionRoute;
+  status: "executed";
+  summary: string;
+};
+
+export type ActionArtifact = {
+  id: string;
+  type:
+    | "employee_nudge"
+    | "manager_brief"
+    | "hr_ops_case"
+    | "focus_block_plan";
+  employeeId: string;
+  employeeName: string;
+  owner: "Employee" | "Manager" | "HR Ops";
+  title: string;
+  body: string;
+};
+
+export type FollowUpTask = {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  owner: "Employee" | "Manager" | "HR Ops";
+  dueIn: "48 hours" | "3 working days" | "7 days";
+  trigger: string;
+  task: string;
+  status: "queued";
+};
+
+export type RunLedger = {
+  runId: string;
+  scenario: DemoScenario;
+  startedAt: string;
+  completedAt: string;
+  employeesAnalyzed: number;
+  decisionsMade: number;
+  toolsExecuted: number;
+  actionArtifactsCreated: number;
+  followUpsQueued: number;
+};
+
 export type MediaryLoopOutput = {
   scenario: DemoScenario;
   orgSummary: OrgSummary;
@@ -210,6 +262,10 @@ export type MediaryLoopOutput = {
     assumptions: string[];
   };
   selectedEmployeeDetail: EmployeeLoopDetail;
+  toolInvocations: ToolInvocation[];
+  actionArtifacts: ActionArtifact[];
+  followUpTasks: FollowUpTask[];
+  runLedger: RunLedger;
   executionTrace: ExecutionTraceStep[];
   workflowStatus: "Autonomous org-wide workload diplomacy loop completed";
 };

@@ -114,7 +114,11 @@ The submitted application runs locally without external model dependency for jud
 21. Previous week risk context  
 22. Manager coaching brief for high and sustained-high routes  
 23. Projected meeting hours reduced  
-24. Projected focus hours gained
+24. Projected focus hours gained  
+25. Internal tool execution adapters (deterministic simulation)  
+26. Stakeholder-specific action artifact generation  
+27. Route-based follow-up task queue  
+28. Run ledger for each autonomous cycle
 
 ## 9) Demo Scenarios
 
@@ -178,12 +182,17 @@ The top-level agent output includes:
   - `projectedFocusHoursGained`
 - `selectedEmployeeDetail`
   - `monthlyTrend`
+- `toolInvocations`
+- `actionArtifacts`
+- `followUpTasks`
+- `runLedger`
 - `executionTrace`
 - `workflowStatus`
 
 The monthly trend fields allow Mediary to reason over sustained workload patterns instead of only a single-week snapshot.
 
 This allows the UI and CLI to consume the same deterministic contract.
+The execution adapters are deterministic internal simulations, not live external system integrations.
 
 ## 15) Limitations
 
