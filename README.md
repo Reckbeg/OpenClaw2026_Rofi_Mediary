@@ -60,6 +60,16 @@ Open either:
 4. Optionally verify the API directly:
    - `POST /api/analyze` returns deterministic JSON including `executionTrace`.
 
+CLI scenarios:
+
+```bash
+# Baseline scenario (default)
+npm run agent
+
+# Sustained-high scenario (activates HR Ops queue branch)
+npm run agent -- --scenario=sustained-high
+```
+
 ## AI Tools / Models Used
 
 - Cursor for development assistance.

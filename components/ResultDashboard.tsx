@@ -22,12 +22,13 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
           <h2 className="text-2xl font-semibold text-stone-950">Workflow diplomacy</h2>
           {result && (
             <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-emerald-800">
-              Autonomous workflow completed
+              {result.workflowStatus}
             </span>
           )}
         </div>
         <p className="mt-2 text-sm leading-6 text-stone-600">
           Deterministic analyzer and diplomat agents produce operational, non-clinical interventions.
+          {result ? ` Scenario: ${result.scenario}.` : ""}
         </p>
       </div>
 
@@ -46,20 +47,81 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
 
       {!isLoading && result && (
         <div className="space-y-6">
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+            <h3 className="font-semibold text-emerald-900">Org summary</h3>
+            <p className="mt-1 text-sm text-emerald-900/90">
+              {result.orgSummary.totalEmployees} employees analyzed · avg risk {result.orgSummary.avgRiskScore}
+            </p>
+            <p className="mt-2 text-sm text-emerald-900/90">
+              Low {result.orgSummary.lowRiskCount} · Medium {result.orgSummary.mediumRiskCount} · High {result.orgSummary.highRiskCount} · Sustained High {result.orgSummary.sustainedHighCount}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">HR memo</h3>
+            <p className="mt-2 text-sm leading-6 text-stone-700">{result.hrMemo}</p>
+          </div>
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Team heatmap</h3>
+            <div className="mt-3 space-y-2">
+              {result.teamHeatmap.slice(0, 6).map((teamItem) => (
+                <div key={teamItem.team} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                  {teamItem.team}: {teamItem.avgRiskScore}/100 ({teamItem.riskBucket}) · {teamItem.employeeCount} members · {teamItem.highRiskMembers} high-risk
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Intervention queue</h3>
+            <div className="mt-3 space-y-2">
+              {result.interventionQueue.length === 0 && (
+                <div className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600">
+                  No queued interventions. Org remains in monitor state.
+                </div>
+              )}
+              {result.interventionQueue.slice(0, 5).map((item) => (
+                <div key={item.employeeId} className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
+                  {item.employeeName} ({item.team}) · {item.riskScore}/100 {item.riskBucket} · {item.route}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+            <h3 className="font-semibold text-stone-950">Impact simulation</h3>
+            <p className="mt-2 text-sm text-stone-700">
+              Avg risk {result.impactSimulation.before.avgRiskScore} → {result.impactSimulation.after.projectedAvgRiskScore}
+              {" · "}High-risk {result.impactSimulation.before.highRiskCount} → {result.impactSimulation.after.projectedHighRiskCount}
+              {" · "}Sustained-high {result.impactSimulation.before.sustainedHighCount} → {result.impactSimulation.after.projectedSustainedHighCount}
+            </p>
+            <p className="mt-1 text-sm text-stone-700">
+              Queue {result.impactSimulation.before.interventionQueueCount} → {result.impactSimulation.after.projectedInterventionQueueCount}
+            </p>
+            <div className="mt-3 space-y-1">
+              {result.impactSimulation.assumptions.map((assumption) => (
+                <p key={assumption} className="text-xs text-stone-600">
+                  - {assumption}
+                </p>
+              ))}
+            </div>
+          </div>
+
           <div className="rounded-2xl bg-stone-950 p-5 text-white">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-stone-300">Overload risk score</p>
-                <p className="mt-2 text-5xl font-semibold">{result.scoring.overallRiskScore}</p>
+                <p className="text-sm text-stone-300">{result.selectedEmployeeDetail.employee.name} overload risk score</p>
+                <p className="mt-2 text-5xl font-semibold">{result.selectedEmployeeDetail.scoring.overallRiskScore}</p>
               </div>
-              <span className={`rounded-full px-3 py-1 text-sm font-semibold ${riskStyles[result.scoring.riskBucket]}`}>
-                {result.scoring.riskBucket}
+              <span className={`rounded-full px-3 py-1 text-sm font-semibold ${riskStyles[result.selectedEmployeeDetail.scoring.riskBucket]}`}>
+                {result.selectedEmployeeDetail.scoring.riskBucket}
               </span>
             </div>
-            <p className="mt-4 text-sm leading-6 text-stone-300">{result.analyzer.summary}</p>
+            <p className="mt-4 text-sm leading-6 text-stone-300">{result.selectedEmployeeDetail.analyzer.summary}</p>
           </div>
 
-          <MetricsCards scoring={result.scoring} />
+          <MetricsCards scoring={result.selectedEmployeeDetail.scoring} />
 
           <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
             <h3 className="font-semibold text-stone-950">Agent execution trace</h3>
@@ -82,6 +144,9 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
                         <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-emerald-800">
                           {step.status}
                         </span>
+                        <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-blue-800">
+                          {step.phase}
+                        </span>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-stone-700">{step.output}</p>
                     </div>
@@ -94,7 +159,7 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">Top drivers</h3>
             <div className="mt-3 space-y-2">
-              {result.scoring.topDrivers.map((driver) => (
+              {result.selectedEmployeeDetail.scoring.topDrivers.map((driver) => (
                 <div key={driver} className="rounded-xl border border-stone-100 bg-stone-50 px-3 py-2 text-sm text-stone-700">
                   {driver}
                 </div>
@@ -107,7 +172,7 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
               Three concrete interventions
             </h3>
             <div className="mt-3 space-y-3">
-              {result.diplomat.interventions.map((intervention, index) => (
+              {result.selectedEmployeeDetail.diplomat.interventions.map((intervention, index) => (
                 <RecommendationCard key={intervention.title} intervention={intervention} index={index} />
               ))}
             </div>
@@ -115,7 +180,7 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
 
           <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
             <h3 className="font-semibold text-stone-950">Diplomatic message draft</h3>
-            <p className="mt-3 text-sm leading-6 text-stone-700">{result.diplomat.diplomaticMessageDraft}</p>
+            <p className="mt-3 text-sm leading-6 text-stone-700">{result.selectedEmployeeDetail.diplomat.diplomaticMessageDraft}</p>
           </div>
 
           <div>
@@ -123,7 +188,7 @@ export function ResultDashboard({ result, isLoading }: ResultDashboardProps) {
               Cleaned-up week preview
             </h3>
             <div className="mt-3 space-y-3">
-              {result.diplomat.cleanedWeekPreview.map((day) => (
+              {result.selectedEmployeeDetail.diplomat.cleanedWeekPreview.map((day) => (
                 <div key={day.day} className="rounded-2xl border border-stone-100 bg-white p-4 shadow-sm">
                   <p className="font-semibold text-stone-950">{day.day}</p>
                   <div className="mt-3 grid gap-2 text-sm text-stone-600">

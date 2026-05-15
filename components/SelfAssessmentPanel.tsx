@@ -1,4 +1,4 @@
-import { selfAssessmentQuestions } from "@/lib/scoring/selfAssessment";
+import { selfAssessmentQuestions } from "@/src/modules/scoring/selfAssessment";
 import type { SelfAssessmentAnswer } from "@/lib/types";
 
 type SelfAssessmentPanelProps = {

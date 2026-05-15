@@ -4,8 +4,8 @@ import { useState } from "react";
 import { CalendarPanel } from "@/components/CalendarPanel";
 import { ResultDashboard } from "@/components/ResultDashboard";
 import { SelfAssessmentPanel } from "@/components/SelfAssessmentPanel";
-import { sampleWeek } from "@/lib/data/sampleWeek";
-import { defaultSelfAssessmentAnswers } from "@/lib/scoring/selfAssessment";
+import { defaultEmployeeId, sampleOrgDataset } from "@/src/data/sampleOrg";
+import { defaultSelfAssessmentAnswers } from "@/src/modules/scoring/selfAssessment";
 import type { AnalyzeResponse, SelfAssessmentAnswer } from "@/lib/types";
 
 export default function Home() {
@@ -13,6 +13,10 @@ export default function Home() {
   const [result, setResult] = useState<AnalyzeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const selectedEmployee =
+    sampleOrgDataset.employees.find((employee) => employee.id === defaultEmployeeId) ??
+    sampleOrgDataset.employees[0];
+  const selectedMeetings = sampleOrgDataset.calendarsByEmployee[selectedEmployee.id] ?? [];
 
   function handleAnswerChange(questionId: string, score: number) {
     setAnswers((currentAnswers) =>
@@ -33,6 +37,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          employeeId: defaultEmployeeId,
           selfAssessmentAnswers: answers,
         }),
       });
@@ -67,10 +72,14 @@ export default function Home() {
             </p>
           </div>
           <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-900">
-            Autonomous workflow: calendar load → risk scoring → analyzer agent → workflow diplomat.
+            Autonomous workflow: observe → reason → decide → execute → follow-up.
           </div>
         </div>
       </header>
+
+      <div className="mb-6 rounded-2xl border border-stone-200 bg-white/80 p-4 text-sm text-stone-700 shadow-sm">
+        Org-wide run analyzes all {sampleOrgDataset.employees.length} employees first, then displays selected employee detail for {selectedEmployee.name}.
+      </div>
 
       {error && (
         <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
@@ -79,7 +88,16 @@ export default function Home() {
       )}
 
       <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr_1.2fr]">
-        <CalendarPanel week={sampleWeek} />
+        <CalendarPanel
+          week={{
+            employee: {
+              name: selectedEmployee.name,
+              role: selectedEmployee.role,
+              team: selectedEmployee.team,
+            },
+            meetings: selectedMeetings,
+          }}
+        />
         <SelfAssessmentPanel
           answers={answers}
           onAnswerChange={handleAnswerChange}
